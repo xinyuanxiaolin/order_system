@@ -27,8 +27,14 @@ const router = new VueRouter({
           component: Home,
         },
         {
-          path: "detail",
+          name:'detail',
+          path: "detail/:dish",
           component: ShowDishDetail,
+          props(route) {
+            return {
+              dish:route.params.dish
+            }
+          }
         },
         {
           path: "cart",

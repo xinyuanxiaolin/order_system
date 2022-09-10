@@ -8,8 +8,7 @@
         <el-input
           placeholder="请输入菜品名"
           prefix-icon="el-icon-search"
-          v-model="input"
-          @keyup.enter.native="confirmSearch"
+          v-model="page.input"
         >
         </el-input>
       </div>
@@ -76,22 +75,26 @@
         <el-form-item label="菜品名">
           <el-input v-model="formLabelAlign.name"></el-input>
         </el-form-item>
+        <el-form-item label="菜品类别">
+          <el-input v-model="formLabelAlign.categoryName"></el-input>
+        </el-form-item>
         <el-form-item label="描述">
           <el-input v-model="formLabelAlign.description"></el-input>
         </el-form-item>
         <el-form-item label="价格">
-          <el-input v-model="formLabelAlign.price"></el-input>
+          <el-input oninput="value=value.replace(/[^\d]/g,'')" v-model="formLabelAlign.price"></el-input>
         </el-form-item>
         <el-form-item label="图片:">
           <el-upload
             class="upload-demo"
             ref="upload"
             action="http://localhost:8080/api//file/upload"
-            
             :file-list="fileList"
-            :auto-upload="false"
+            :on-success="successUpload"
           >
-            <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+            <el-button slot="trigger" size="small" type="primary"
+              >选取文件</el-button
+            >
 
             <div slot="tip" class="el-upload__tip">
               只能上传jpg/png文件，且不超过500kb
@@ -124,37 +127,45 @@ export default {
         pageSize: 8,
         pageTotal: "",
         dataTotal: null,
+        // 搜索框
+        input: "",
       },
 
       labelPosition: "right",
       formLabelAlign: {
         name: "",
         description: "",
-        price: "",
+        price: null,
+        categoryName: "",
       },
       // 图片文件
       fileList: [],
       // 开关窗口
       showDish: false,
-      // 搜索框
-      input: "",
+
+      // 图片的地址
+      url: "",
     };
   },
   watch: {
     page: {
       deep: true,
       immediate: true,
+      // 只能实现首页自动搜索功能
       handler() {
         axios
           .get(
-            `http://localhost:8080/api/dish/page?pageNum=${this.page.pageNum}&pageSize=${this.page.pageSize}`
+            `http://localhost:8080/api/dish/page?pageNum=${this.page.pageNum}&pageSize=${this.page.pageSize}&name=${this.page.input}`
           )
           .then(
             (res) => {
-              // console.log(res);
-              this.tableData = res.data.data.records;
-              this.page.pageTotal = res.data.data.pages;
-              this.page.dataTotal = res.data.data.total;
+              console.log(res.data);
+              if (res.data.code === "200") {
+                this.tableData = res.data.data.records;
+                this.page.pageTotal = res.data.data.pages;
+                this.page.dataTotal = res.data.data.total;
+                // this.page.pageNum=res.data.data.current;
+              }
             },
             (err) => {
               console.log(err);
@@ -201,12 +212,42 @@ export default {
 
     // !!!!!!!!!!!!!!!!!!!!!!!
     // 上传图片和新增
+
+    successUpload(res) {
+      console.log(res);
+      this.url = res;
+    },
     submitUpload() {
-      this.$refs.upload.submit();
-      // console.log(this.fileList)
+      // 上传
+      // this.$refs.upload.submit();
+      console.log(this.url);
+
+      axios
+        .post(`http://localhost:8080/api/dish/save`, {
+          name: this.formLabelAlign.name,
+          categoryName: this.formLabelAlign.categoryName,
+          description: this.formLabelAlign.description,
+          price: this.formLabelAlign.price,
+          image: this.url,
+        })
+        .then(
+          (res) => {
+            console.log(res.data);
+            if (res.data.code === "200") {
+              alert("添加成功!");
+              this.reload();
+            } else if (res.data.code === "600") {
+              alert(res.data.msg);
+            } else if (res.data.code === "400") {
+              alert(res.data.msg);
+            }
+          },
+          (err) => {
+            console.log(err.message);
+          }
+        );
     },
 
-   
     // 打开新增窗口
     addDish() {
       this.showDish = true;
@@ -219,23 +260,7 @@ export default {
     },
 
     // 执行搜索
-    confirmSearch() {
-      axios
-        .get(
-          `http://localhost:8080/api/dish/page?pageNum=${this.page.pageNum}&pageSize=${this.page.pageSize}&name=${this.input}`
-        )
-        .then(
-          (res) => {
-            // console.log(res.data);
-            if (res.data.code === "200") {
-              this.tableData = res.data.data.records;
-            }
-          },
-          (err) => {
-            console.log(err);
-          }
-        );
-    },
+    confirmSearch() {},
   },
 };
 </script>

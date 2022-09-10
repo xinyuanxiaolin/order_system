@@ -112,7 +112,9 @@ export default {
               console.log("请求成功了", response.data);
               localStorage.token = response.data.data.token;
               localStorage.username = response.data.data.username;
-              localStorage.admin = response.data.data.admin;     
+              localStorage.admin = response.data.data.admin;  
+              localStorage.userId=response.data.data.id;  
+              localStorage.nickname=response.data.data.nickname;
               this.$router.push("/index");
               
             } else if (response.data.code === "600") {
@@ -387,4 +389,5 @@ button.ghost:active {
   transform: translateX(20%);
   transition: all 0.6s ease-in-out;
 }
+
 </style>
