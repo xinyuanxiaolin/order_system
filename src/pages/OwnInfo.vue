@@ -4,7 +4,13 @@
       <el-col :span="12">
         <div class="demo-basic--circle">
           <div class="block">
-            <el-avatar :size="60" :src="circleUrl"></el-avatar>
+            <el-avatar
+              :size="60"
+              style="border: 1px solid black"
+              :fit="cover"
+              :src="circleUrl"
+              @click="changeAvatar"
+            ></el-avatar>
           </div>
         </div>
       </el-col>
@@ -41,6 +47,7 @@
           >编辑</el-button
         >
         <el-button @click="save" v-if="!option.is_edit">保存</el-button>
+        <el-button @click="cancel" v-if="!option.is_edit">取消</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -91,14 +98,18 @@ export default {
               this.option.is_edit = !this.option.is_edit;
 
               // 保存昵称
-              localStorage.nickname=this.user.nickname
-              
+              localStorage.nickname = this.user.nickname;
             }
           },
           (err) => {
             console.log(err.message);
           }
         );
+    },
+
+    cancel() {
+      this.option.is_input = !this.option.is_input;
+      this.option.is_edit = !this.option.is_edit;
     },
   },
   mounted() {
@@ -109,6 +120,10 @@ export default {
           console.log(res.data);
           if (res.data.code === "200") {
             this.user = res.data.data;
+            this.circleUrl =
+              res.data.data.avatarUrl === null
+                ? this.circleUrl
+                : res.data.data.avatarUrl;
           }
         },
         (err) => {

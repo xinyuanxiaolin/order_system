@@ -109,6 +109,9 @@ export default {
             if(res.data.code==='200'){
               this.$router.push('/index/order')
             }
+            else if(res.data.code==='400'){
+              alert(res.data.msg)
+            }
           },
           (err) => {
             console.log(err.message);

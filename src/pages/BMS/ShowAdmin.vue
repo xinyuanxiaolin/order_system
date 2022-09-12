@@ -1,256 +1,362 @@
 <template>
-  <div class="content-page">
-    <table width="1219" border="1" id="admin" cellpadding="0" cellspacing="0">
-      <caption>
-        用户信息表
-      </caption>
-      <tr>
-        <button @click="addUsers">新增</button>
-        <input
-          type="text"
-          id="search"
+  <div>
+    <el-row>
+      <el-button round @click="addUser"
+        ><i class="el-icon-plus"></i> 新增</el-button
+      >
+      <div style="float: right">
+        <el-input
           placeholder="请输入用户名进行搜索"
-          v-model="title"
-        />
-      </tr>
-      <tr>
-        <th>序号</th>
-        <th>用户名</th>
-        <th>电话</th>
-        <th>昵称</th>
-        <th>地址</th>
-        <th>性别</th>
-        <th>是否为管理员</th>
+          prefix-icon="el-icon-search"
+          v-model="page.input"
+        >
+        </el-input>
+      </div>
+    </el-row>
 
-        <th colspan="1">操作</th>
-      </tr>
-      <tr v-for="m in info" :key="m.id">
-        <td>{{ m.id }}</td>
-        <td>{{ m.username }}</td>
-        <td>{{ m.telephone }}</td>
-        <td>{{ m.nickname }}</td>
-        <td>{{ m.address }}</td>
-        <td>{{ m.sex }}</td>
-        <td>{{ m.admin === 1 ? "是" : "否" }}</td>
+    <el-table :data="tableData" style="width: 100%" border stripe size="small">
+      <el-table-column prop="id" label="序号" width="100"> </el-table-column>
+      <el-table-column prop="username" label="用户名" width="200">
+      </el-table-column>
+      <el-table-column
+        prop="telephone"
+        label="电话"
+        width="200"
+        :show-overflow-tooltip="true"
+      >
+      </el-table-column>
+      <el-table-column prop="nickname" label="昵称" width="200">
+      </el-table-column>
+      <el-table-column prop="address" label="地址" width="200">
+      </el-table-column>
+      <el-table-column prop="sex" label="性别" width="100"> </el-table-column>
+      <el-table-column label="是否为管理员">
+        <template slot-scope="scope">
+          <span>{{ scope.row.admin === 1 ? "是" : "否" }}</span>
+        </template>
+      </el-table-column>
 
-        <td>
-          <button @click="editS(m)">编辑</button>
-          <button @click="deleteUser(m.username)">删除</button>
-        </td>
-      </tr>
-    </table>
+      <el-table-column fixed="right" label="操作" width="120">
+        <template slot-scope="scope">
+          <el-button
+            @click.native.prevent="editRow(scope.$index, tableData)"
+            type="text"
+            size="small"
+          >
+            编辑
+          </el-button>
+          <el-button
+            @click.native.prevent="deleteRow(scope.$index, tableData)"
+            type="text"
+            size="small"
+          >
+            移除
+          </el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <br />
 
-    <div class="btn">
-      <button @click="prePage">上一页</button>
-      <button style="width: 20px; height: 23px">
-        {{ pageNum }}
-      </button>
-      <button @click="nextPage">下一页</button>
-    </div>
+    <el-pagination
+      background
+      layout="prev, pager, next"
+      :page-size="$data.page.pageSize"
+      :pager-count="7"
+      :total="$data.page.dataTotal"
+      @prev-click="prevClick"
+      @next-click="nextClick"
+      @current-change="curChange"
+    >
+    </el-pagination>
 
-    <!-- 新增用户弹窗界面 -->
-    <div class="addUser" v-show="is_add">
-      <button @click="closeAdd" style="float: right">关闭</button>
-      <form class="addUserPage">
-        <label>用户名:</label>
-        <input type="text" v-model="addobj.username" />
+    <!-- 编辑的方框 -->
+    <el-dialog title="用户编辑" :visible.sync="dialogFormVisible">
+      <el-form :model="editTable">
+        <el-form-item label="电话" :label-width="formLabelWidth">
+          <el-input v-model="editTable.telephone" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="地址" :label-width="formLabelWidth">
+          <el-input v-model="editTable.address" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="昵称" :label-width="formLabelWidth">
+          <el-input v-model="editTable.nickname" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="性别" :label-width="formLabelWidth">
+          <el-select v-model="editTable.sex">
+            <el-option label="男" value="男"></el-option>
+            <el-option label="女" value="女"></el-option>
+          </el-select>
+        </el-form-item>
+          <el-form-item label="管理员" :label-width="formLabelWidth">
+          <el-select v-model="editTable.admin"  placeholder="请选择">
+            <el-option label="是" value=1></el-option>
+            <el-option label="否" value=0></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="comfirmChange"
+          >确 定</el-button
+        >
+      </div>
+    </el-dialog>
 
-        <br />
+    <!-- 增加的方框 -->
+    <el-dialog title="用户编辑" :visible.sync="dialogAddFormVisible"> 
+   
+   
+      <el-radio-group v-model="labelPosition" size="small">
+        <el-radio-button label="left">左对齐</el-radio-button>
+        <el-radio-button label="right">右对齐</el-radio-button>
+      </el-radio-group>
+      <div style="margin: 20px"></div>
+      <el-form
+        :label-position="labelPosition"
+        label-width="80px"
+        :model="formLabelAlign"
+      >
+        <el-form-item label="用户名">
+          <el-input v-model="formLabelAlign.username"></el-input>
+        </el-form-item>
+        <el-form-item label="密码">
+          <el-input v-model="formLabelAlign.password"></el-input>
+        </el-form-item>
+        <el-form-item label="电话">
+          <el-input
+            oninput="value=value.replace(/[^\d]/g,'')"
+            v-model="formLabelAlign.telephone"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="地址">
+          <el-input v-model="formLabelAlign.address"></el-input>
+        </el-form-item>
+        <el-form-item label="性别">
+          <el-select v-model="formLabelAlign.sex">
+            <el-option label="男" value="男"></el-option>
+            <el-option label="女" value="女"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="管理员">
+          <el-select v-model="formLabelAlign.admin">
+            <el-option label="是" value="1"></el-option>
+            <el-option label="否" value="0"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="头像:">
+          <el-upload
+            class="upload-demo"
+            ref="upload"
+            action="http://localhost:8080/api//file/upload"
+            :file-list="fileList"
+            :on-success="successUpload"
+          >
+            <el-button slot="trigger" size="small" type="primary"
+              >选取文件</el-button
+            >
 
-        <label>&nbsp;&nbsp;&nbsp;电话:</label>
-        <input type="text" v-model="addobj.telephone" />
+            <div slot="tip" class="el-upload__tip">
+              只能上传jpg/png文件，且不超过500kb
+            </div>
+          </el-upload>
+        </el-form-item>
 
-        <br />
-
-        <label>&nbsp;&nbsp;&nbsp;昵称:</label>
-        <input type="text" v-model="addobj.nickname" />
-        <br />
-
-        <label>&nbsp;&nbsp;&nbsp;地址:</label>
-        <input type="text" v-model="addobj.address" />
-        <br />
-
-        <label for="sex">&nbsp;&nbsp;&nbsp;性别:</label>
-        <select id="sex" v-model="addobj.sex">
-          <option>男</option>
-          <option>女</option>
-        </select>
-        <br />
-        <label for="admin">管理员:</label>
-        <select id="admin" v-model="addobj.admin">
-          <option>是</option>
-          <option>否</option>
-        </select>
-        <br />
-        <button @click="confirmAdd">确认添加</button>
-      </form>
-    </div>
-
-    <!-- 编辑用户弹窗界面 -->
-    <div class="addUser" v-show="is_change">
-      <button @click="closeEdit" style="float: right">关闭</button>
-      <form class="addUserPage">
-        <label>&nbsp;&nbsp;&nbsp;电话:</label>
-        <input type="text" v-model="editobj.telephone" />
-
-        <br />
-
-        <label>&nbsp;&nbsp;&nbsp;昵称:</label>
-        <input type="text" v-model="editobj.nickname" />
-        <br />
-
-        <label>&nbsp;&nbsp;&nbsp;地址:</label>
-        <input type="text" v-model="editobj.address" />
-        <br />
-
-        <label for="sex">&nbsp;&nbsp;&nbsp;性别:</label>
-        <select id="sex" v-model="editobj.sex">
-          <option>男</option>
-          <option>女</option>
-        </select>
-        <br />
-        <label for="admin">管理员:</label>
-        <select id="admin" v-model="editobj.admin">
-          <option>是</option>
-          <option>否</option>
-        </select>
-        <br />
-        <button @click="confirmChange">确认修改</button>
-      </form>
-    </div>
+        <el-button
+          style="margin-left: 10px"
+          size="small"
+          type="success"
+          @click="submitUpload"
+          >确认添加</el-button
+        >
+      </el-form>
+    </el-dialog>
+   
   </div>
 </template>
 
 <script>
 import axios from "axios";
-
 export default {
   name: "ShowAdmin",
   inject: ["reload"],
   data() {
     return {
-      pageNum: 1, //默认第一页开始
-      pageSize: 8, //默认一页六条记录
-      pages: "", //页数
-      title: "", //搜索框内容
-      info: [],
-      is_add: false, //点击弹出新增用户页面框
-      is_change: false, //点击弹出编辑用户界面
-      addobj: {
-        username: "",
-        telephone: "",
-        nickname: "",
-        address: "",
-        sex: "",
-        admin: "",
+      tableData: [],
+      page: {
+        pageNum: 1,
+        pageSize: 8,
+        pageTotal: "",
+        dataTotal: null,
+        // 搜索框
+        input: "",
       },
-      // 编辑用户
-      editobj: {
-        id: "",
 
+      labelPosition: "right",
+      formLabelAlign: {
+        username: "",
+        password: "",
+        telephone: "",
+        address: "",
+        sex: "",
+        admin: null,
+      },
+      // 图片文件
+      fileList: [],
+     
+
+      // 图片的地址
+      url: "",
+      // 新增方框的显示
+      dialogAddFormVisible:false,
+      // 编辑方框显示
+      dialogFormVisible: false,
+      formLabelWidth: "120px",
+      editTable: {
+        id:null,
         telephone: "",
         nickname: "",
         address: "",
         sex: "",
-        admin: "",
+        admin: null,
       },
     };
   },
+  watch: {
+    page: {
+      deep: true,
+      immediate: true,
+      // 只能实现首页自动搜索功能
+      handler() {
+        axios
+          .get(
+            `http://localhost:8080/api/user/page?pageNum=${this.page.pageNum}&pageSize=${this.page.pageSize}&username=${this.page.input}`
+          )
+          .then(
+            (res) => {
+              console.log(res.data);
+              if (res.data.code === "200") {
+                this.tableData = res.data.data.records;
+                this.page.pageTotal = res.data.data.pages;
+                this.page.dataTotal = res.data.data.total;
+                // this.page.pageNum=res.data.data.current;
+              }
+            },
+            (err) => {
+              console.log(err);
+            }
+          );
+      },
+    },
+  },
 
   methods: {
-    // 打开新增用户界面
-    addUsers() {
-      this.is_add = true;
+    prevClick() {
+      // console.log('hhh')
+      this.page.pageNum--;
     },
-    // 关闭新增用户界面
-    closeAdd() {
-      this.is_add = false;
+    nextClick() {
+      // console.log('ddd')
+      this.page.pageNum++;
     },
-    // 关闭编辑用户界面
-    closeEdit() {
-      this.is_change = false;
-    },
-    // 编辑用户
-    editS(m) {
-      // console.log(m);
-      this.is_change = true;
-      this.editobj.id = m.id;
-
-      this.editobj.telephone = m.telephone;
-      this.editobj.nickname = m.nickname;
-      this.editobj.address = m.address;
-      this.editobj.sex = m.sex;
-
-      this.editobj.admin = m.admin === 1 ? "是" : "否";
-    },
-    // 删除用户
-    deleteUser(username) {
-      // console.log(username);
-      if (confirm("确定删除吗?")) {
-        axios
-          .get(`http://localhost:8080/api/user/users/${username}`)
-          .then((res) => {
-            if (res.data.code === "200") {
-              alert("删除成功");
-              this.reload();
-            }
-          });
-      }
-    },
-    // 上一页
-    prePage() {
-      if (this.pageNum > 1) {
-        this.pageNum--;
-        console.log(this.pageNum);
-      }
-    },
-    // 下一页
-    nextPage() {
-      if (this.pageNum < this.pages) {
-        this.pageNum++;
-        console.log(this.pageNum);
-      }
+    curChange(value) {
+      this.page.pageNum = value;
     },
 
-    // 确认新增用户
-    confirmAdd() {
+    // 编辑
+    editRow(index, rows) {
+      // console.log(index, rows);
+      this.dialogFormVisible = true;
+      const user = rows[index];
+      this.editTable.nickname = user.nickname;
+      this.editTable.address = user.address;
+      this.editTable.telephone = user.telephone;
+      this.editTable.sex = user.sex;
+      // this.editTable.admin = user.admin;
+      this.editTable.id=user.id;
+    },
+    // 在编辑的时候确认修改
+    comfirmChange(){
       axios
-        .post("http://localhost:8080/api/user/save", {
-          username: this.addobj.username,
-          telephone: this.addobj.telephone,
-          nickname: this.addobj.nickname,
-          address: this.addobj.address,
-          sex: this.addobj.sex,
-          admin: this.addobj.admin === "是" ? 1 : 0,
-        })
-        .then((res) => {
-          if (res.data.code === "200") {
-            alert("添加成功!");
-            this.reload();
-          } else if (res.data.code === "600") {
-            alert(res.data.msg);
-          }
-        });
-    },
-
-    // 确认修改用户
-    confirmChange() {
-      axios
-        .post("http://localhost:8080/api/user/save", {
-          id: this.editobj.id,
-
-          telephone: this.editobj.telephone,
-          nickname: this.editobj.nickname,
-          address: this.editobj.address,
-          sex: this.editobj.sex,
-          admin: this.editobj.admin === "是" ? 1 : 0,
+        .post(`http://localhost:8080/api/user/save  `, {
+          id:this.editTable.id,     
+          address: this.editTable.address,
+          telephone: this.editTable.telephone,
+          sex: this.editTable.sex,
+          admin: this.editTable.admin,
+          // avatar_url: this.url,
         })
         .then(
           (res) => {
+            console.log(res.data);
             if (res.data.code === "200") {
               alert("修改成功!");
               this.reload();
+            } else if (res.data.code === "600") {
+              alert(res.data.msg);
+            } else if (res.data.code === "400") {
+              alert(res.data.msg);
+            }
+          },
+          (err) => {
+            console.log(err.message);
+          }
+        );
+      
+      
+    },
+
+    deleteRow(index, rows) {
+      //   console.log(index, rows[index].id);
+      if (confirm("确定是否移除?")) {
+        axios.delete(`http://localhost:8080/api/user/${rows[index].id}`).then(
+          (res) => {
+            // console.log(res.data);
+            if (res.data.code === "200") {
+              alert("删除成功!");
+              this.reload();
             } else {
+              alert("出现未知错误,请重试!");
+            }
+          },
+          (err) => {
+            console.log(err);
+          }
+        );
+      }
+    },
+
+    // !!!!!!!!!!!!!!!!!!!!!!!
+    // 上传图片和新增
+
+    successUpload(res) {
+      console.log(res);
+      this.url = res;
+    },
+    submitUpload() {
+      // 上传
+      // this.$refs.upload.submit();
+      // console.log(this.url);
+     
+
+      axios
+        .post(`http://localhost:8080/api/user/save  `, {
+          username: this.formLabelAlign.username,
+          password: this.formLabelAlign.password,
+          address: this.formLabelAlign.address,
+          telephone: this.formLabelAlign.telephone,
+          sex: this.formLabelAlign.sex,
+          admin: this.formLabelAlign.admin,
+          avatar_url: this.url,
+        })
+        .then(
+          (res) => {
+            // console.log(res.data);
+            if (res.data.code === "200") {
+              alert("添加成功!");
+              this.reload();
+            } else if (res.data.code === "600") {
+              alert(res.data.msg);
+            } else if (res.data.code === "400") {
               alert(res.data.msg);
             }
           },
@@ -259,101 +365,39 @@ export default {
           }
         );
     },
-  },
-  watch: {
-    pageNum: {
-      immediate: true,
-      handler() {
-        axios
-          .get(
-            `http://localhost:8080/api/user/page?pageNum=${this.pageNum}&pageSize=${this.pageSize}`
-          )
-          .then(
-            (res) => {
-              // console.log(res.data);
-              this.info = res.data.data.records; //记录传回来的数组
-              this.pages = res.data.data.pages;
 
-              // console.log(this.info);
-            },
-            (err) => {
-              console.log(err.message);
-            }
-          );
-      },
+    // 打开新增窗口
+    addUser() {
+       this.dialogAddFormVisible=true;
     },
-  },
-  // 挂载时加载初始数据
-  mounted() {
-    axios
-      .get(
-        `http://localhost:8080/api/user/page?pageNum=${this.pageNum}&pageSize=${this.pageSize}`,
-      )
-      .then(
-        (res) => {
-          // console.log(res.data);
 
-          this.info = res.data.data.records; //记录传回来的数组
-          this.pages = res.data.data.pages;
 
-          // console.log(this.info);
-        },
-        (err) => {
-          console.log(err.message);
-        }
-      );
+
+    // 执行搜索
+    confirmSearch() {},
   },
 };
 </script>
 
-<style scoped>
-.content-page {
-  background-color: rgba(244, 244, 244, 0.5);
-  border-radius: 10px;
-}
-#admin {
-  table-layout: fixed;
+<style >
+.el-tooltip__popper {
+  font-size: 14px;
+  max-width: 40%;
 }
 
-#admin caption {
-  background-color: rgb(244, 244, 244);
-}
+#addForm {
+  overflow: auto;
 
-#search {
-  border: 2px solid #999;
-}
-
-button {
-  margin: 5px;
-}
-.btn button {
-  margin-top: 10px;
-}
-
-td {
-  background-color: rgb(244, 244, 244);
-}
-caption {
-  border-radius: 10px 10px 0px 0px;
-}
-
-/* 新增弹窗界面 */
-.addUser {
+  width: 800px;
+  height: 600px;
   position: absolute;
-
-  width: 600px;
-  height: 400px;
   left: 0;
   right: 0;
-  top: 0;
   bottom: 0;
+  top: 0;
   margin: auto;
-
   border-radius: 10px;
-  background-color: rgb(214, 214, 214);
-}
-
-.addUserPage form {
-  position: relative;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
 }
 </style>

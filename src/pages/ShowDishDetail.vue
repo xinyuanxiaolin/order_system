@@ -2,11 +2,11 @@
   <!-- 主体 -->
   <div class="container">
     <div style="display: flex">
-      <img
+      <img 
         :src="dish.image"
         class="img-thumbnail"
         alt="..."
-        style="max-width: 40%"
+        style="width:200px;height:200px;"
       />
       <el-descriptions title="菜品详情" direction=" horizontal" :column="1">
         <el-descriptions-item label="菜品名">{{
@@ -28,7 +28,7 @@
       
       
     </div>
-    <el-button size="small"  style="position:relative;top:-53px;left:256px" @click="addShoppingCart">加入购物车</el-button>
+    <el-button size="small"  style="position:relative;top:-23px;left:208px" @click="addShoppingCart">加入购物车</el-button>
   </div>
 </template>
 

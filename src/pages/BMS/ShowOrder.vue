@@ -1,15 +1,11 @@
 <template>
   <div>
     <el-row>
-      <el-button round @click="addOrder"
-        ><i class="el-icon-plus"></i> 新增</el-button
-      >
       <div style="float: right">
         <el-input
-          placeholder="请输入菜品名"
+          placeholder="请输入订单名称"
           prefix-icon="el-icon-search"
-          v-model="input"
-          @keyup.enter.native="confirmSearch"
+          v-model="page.input"
         >
         </el-input>
       </div>
@@ -17,17 +13,29 @@
 
     <el-table :data="tableData" style="width: 100%" border stripe size="small">
       <el-table-column prop="id" label="序号" width="100"> </el-table-column>
-      <el-table-column prop="name" label="菜品名" width="100">
+      <el-table-column prop="name" label="订单名称" width="100">
       </el-table-column>
+      <el-table-column prop="no" label="订单编号" width="200">
+      </el-table-column>
+
       <el-table-column
-        prop="description"
-        label="描述"
-        width="500"
+        prop="remark"
+        label="备注"
+        width="100"
         :show-overflow-tooltip="true"
       >
       </el-table-column>
-      <el-table-column prop="image" label="图片" width="100"> </el-table-column>
-      <el-table-column prop="price" label="价格" width="200"> </el-table-column>
+      <el-table-column prop="address" label="送货地址" width="100">
+      </el-table-column>
+      <el-table-column prop="consignee" label="收货人" width="100">
+      </el-table-column>
+      <el-table-column prop="telephone" label="电话" width="150">
+      </el-table-column>
+
+      <el-table-column prop="orderTime" label="下单时间" width="150">
+      </el-table-column>
+
+      <el-table-column prop="amount" label="总价"> </el-table-column>
 
       <el-table-column fixed="right" label="操作" width="120">
         <template slot-scope="scope">
@@ -54,76 +62,99 @@
       @current-change="curChange"
     >
     </el-pagination>
-
-    <!-- 增加的方框 -->
-    <div id="addForm" v-show="showDish">
-      <i
-        class="el-icon-close"
-        @click="closeWindow"
-        style="float: right; margin-right: 5px; font-size: 20px"
-      ></i>
-      <br />
-      <el-radio-group v-model="labelPosition" size="small">
-        <el-radio-button label="left">左对齐</el-radio-button>
-        <el-radio-button label="right">右对齐</el-radio-button>
-      </el-radio-group>
-      <div style="margin: 20px"></div>
-      <el-form
-        :label-position="labelPosition"
-        label-width="80px"
-        :model="formLabelAlign"
-      >
-        <el-form-item label="菜品名">
-          <el-input v-model="formLabelAlign.name"></el-input>
-        </el-form-item>
-        <el-form-item label="描述">
-          <el-input v-model="formLabelAlign.description"></el-input>
-        </el-form-item>
-        <el-form-item label="价格">
-          <el-input v-model="formLabelAlign.price"></el-input>
-        </el-form-item>
-        <el-form-item label="图片:">
-          <el-upload
-            class="upload-demo"
-            ref="upload"
-            action="http://localhost:8080/api//file/upload"
-            :file-list="fileList"
-            :on-success="successUpload"
-          >
-            <el-button slot="trigger" size="small" type="primary"
-              >选取文件</el-button
-            >
-
-            <div slot="tip" class="el-upload__tip">
-              只能上传jpg/png文件，且不超过500kb
-            </div>
-          </el-upload>
-        </el-form-item>
-
-        <el-button
-          style="margin-left: 10px"
-          size="small"
-          type="success"
-          @click="submitUpload"
-          >确认添加</el-button
-        >
-      </el-form>
-    </div>
   </div>
 </template>
 
 <script>
+import axios from "axios";
 export default {
   name: "ShowOrder",
   inject: ["reload"],
+  data() {
+    return {
+      tableData: [],
+      page: {
+        pageNum: 1,
+        pageSize: 8,
+        pageTotal: "",
+        dataTotal: null,
+        // 搜索框
+        input: "",
+      },
+    };
+  },
+  watch: {
+    page: {
+      deep: true,
+      immediate: true,
+      // 只能实现首页自动搜索功能
+      handler() {
+        axios
+          .get(
+            `http://localhost:8080/api/orders/page?admin=${localStorage.admin}&pageNum=${this.page.pageNum}&pageSize=${this.page.pageSize}&name=${this.page.input}`
+          )
+          .then(
+            (res) => {
+              console.log(res.data);
+              if (res.data.code === "200") {
+                this.tableData = res.data.data.records;
+                this.page.pageTotal = res.data.data.pages;
+                this.page.dataTotal = res.data.data.total;
+                // this.page.pageNum=res.data.data.current;
+              }
+            },
+            (err) => {
+              console.log(err);
+            }
+          );
+      },
+    },
+  },
 
   methods: {
-   addOrder(){
+    prevClick() {
+      // console.log('hhh')
+      this.page.pageNum--;
+    },
+    nextClick() {
+      // console.log('ddd')
+      this.page.pageNum++;
+    },
+    curChange(value) {
+      this.page.pageNum = value;
+    },
 
-    }
+    deleteRow(index, rows) {
+      //   console.log(index, rows[index].id);
+      if (confirm("确定是否移除?")) {
+        axios
+          .delete(`http://localhost:8080/api/orders/${rows[index].id}`)
+          .then(
+            (res) => {
+              // console.log(res.data);
+              if (res.data.code === "200") {
+                alert("删除成功!");
+                this.reload();
+              } else {
+                alert("出现未知错误,请重试!");
+              }
+            },
+            (err) => {
+              console.log(err);
+            }
+          );
+      }
+    },
+
+    // 执行搜索
+    confirmSearch() {},
   },
 };
 </script>
 
-<style>
+<style >
+.el-tooltip__popper {
+  font-size: 14px;
+  max-width: 40%;
+}
 </style>

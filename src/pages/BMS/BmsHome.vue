@@ -66,6 +66,7 @@
                 <span>订单信息</span>
               </template>
             </el-menu-item>
+       
           </el-submenu>
         </el-menu>
       </el-aside>
@@ -102,7 +103,8 @@ export default {
     },
     goToIndex(){
       this.$router.push('/index')
-    }
+    },
+
   },
 };
 </script>

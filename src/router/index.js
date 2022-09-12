@@ -11,6 +11,8 @@ import OwnInfo from "@/pages/OwnInfo";
 import Login from "@/components/Login";
 import BmsHome from "@/pages/BMS/BmsHome";
 import ShowAdmin from "@/pages/BMS/ShowAdmin";
+
+
 import ShowDish from "@/pages/BMS/ShowDish";
 import ShowCategory from "@/pages/BMS/ShowDishCategory";
 import ShowOrder from "@/pages/BMS/ShowOrder";
@@ -67,6 +69,7 @@ const router = new VueRouter({
           path: "admin",
           component: ShowAdmin,
         },
+   
         {
           path: "dish",
           component: ShowDish,
