@@ -44,8 +44,8 @@ export default {
   data() {
     return {
       image: [
-        { id: 0, src: require("../assets/logo.png") },
-        { id: 1, src: require("../assets/logo.png") },
+        { id: 0, src: require("../assets/星空.png") },
+        { id: 1, src: require("../assets/奇蛋物语.jpg") },
         { id: 2, src: require("../assets/miku黑白.png") },
       ],
       // 菜品名
@@ -170,6 +170,6 @@ a {
   height: 300px;
 }
 .block {
-  margin: 10px;
+  margin-bottom: 10px;
 }
 </style>

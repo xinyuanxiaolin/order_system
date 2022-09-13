@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-row>
+    <el-row style="margin-bottom:10px">
       <el-button round @click="addUser"
         ><i class="el-icon-plus"></i> 新增</el-button
       >

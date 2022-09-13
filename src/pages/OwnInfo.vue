@@ -124,6 +124,7 @@ export default {
               res.data.data.avatarUrl === null
                 ? this.circleUrl
                 : res.data.data.avatarUrl;
+            localStorage.avatarUrl=this.circleUrl;
           }
         },
         (err) => {

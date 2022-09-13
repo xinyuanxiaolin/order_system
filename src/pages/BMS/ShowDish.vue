@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-row>
+    <el-row style="margin-bottom:10px">
       <el-button round @click="addDish"
         ><i class="el-icon-plus"></i> 新增</el-button
       >
@@ -25,7 +25,11 @@
         :show-overflow-tooltip="true"
       >
       </el-table-column>
-      <el-table-column prop="image" label="图片" width="100"> </el-table-column>
+      <el-table-column label="图片" width="150">
+        <template slot-scope="scope">
+          <el-image :src="scope.row.image"></el-image>
+        </template>
+      </el-table-column>
       <el-table-column prop="price" label="价格" width="200"> </el-table-column>
 
       <el-table-column fixed="right" label="操作" width="120">
@@ -82,7 +86,10 @@
           <el-input v-model="formLabelAlign.description"></el-input>
         </el-form-item>
         <el-form-item label="价格">
-          <el-input oninput="value=value.replace(/[^\d]/g,'')" v-model="formLabelAlign.price"></el-input>
+          <el-input
+            oninput="value=value.replace(/[^0-9.]/g,'')"
+            v-model="formLabelAlign.price"
+          ></el-input>
         </el-form-item>
         <el-form-item label="图片:">
           <el-upload
@@ -91,13 +98,15 @@
             action="http://localhost:8080/api//file/upload"
             :file-list="fileList"
             :on-success="successUpload"
+            :before-upload="beforeUpload"
+            accept=".jpg,.jpeg,.png,.JPG,.JPEG"
           >
             <el-button slot="trigger" size="small" type="primary"
               >选取文件</el-button
             >
 
             <div slot="tip" class="el-upload__tip">
-              只能上传jpg/png文件，且不超过500kb
+              只能上传jpg/png文件，且不超过2mb
             </div>
           </el-upload>
         </el-form-item>
@@ -210,6 +219,23 @@ export default {
       }
     },
 
+    beforeUpload(file) {
+      const img = file.type === "image/jpeg" || file.type === "image/png";
+      const imgSize = file.size / 1024 / 1024 < 2;
+      // console.log(file.size);
+      if (!img) {
+        this.$message.error("上传的图片只能是jpg/png格式!");
+        return false;
+      }
+
+      if (!imgSize) {
+        this.$message.error("上传头像大小不能超过2M!");
+        return false;
+      }
+      console.log("hhh");
+      return true;
+    },
+
     // !!!!!!!!!!!!!!!!!!!!!!!
     // 上传图片和新增
 
@@ -265,7 +291,7 @@ export default {
 };
 </script>
 
-<style >
+<style  >
 .el-tooltip__popper {
   font-size: 14px;
   max-width: 40%;

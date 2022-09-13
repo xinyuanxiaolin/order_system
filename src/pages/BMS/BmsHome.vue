@@ -121,7 +121,7 @@ export default {
   padding-left: 0;
   align-items: center;
   color: #fff;
-  font-size: 20px;
+  font-size: 20px;  
 }
 .el-header span {
   margin-left: 15px;

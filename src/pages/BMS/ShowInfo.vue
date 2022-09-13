@@ -34,7 +34,7 @@ export default {
 
 <style>
 .content {
-  height: 100%;
+
   padding: 20px;
   background-color: #fff;
   

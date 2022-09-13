@@ -74,7 +74,7 @@
     </el-dialog>
 
     <!-- 微信支付宝支付 -->
-    <el-dialog title="支付界面" :visible.sync="showPayment">
+    <!-- <el-dialog title="支付界面" :visible.sync="showPayment">
       <el-tabs v-model="activeName">
         <el-tab-pane label="微信支付" name="first">
           <el-image
@@ -91,7 +91,7 @@
           ></el-image>
         </el-tab-pane>
       </el-tabs>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 
@@ -134,7 +134,11 @@ export default {
     payRow(index, rows) {
       console.log(index, rows[index]);
 
-      this.showPayment = true;
+      // this.showPayment = true;
+
+      window.open(
+        `http://localhost:8080/api/alipay//pay?traceNo=${rows[index].no}&totalAmount=${rows[index].amount}&subject=${localStorage.nickname}`
+      );
     },
 
     // 显示菜品
@@ -160,7 +164,7 @@ export default {
       )
       .then(
         (res) => {
-          console.log(res.data);
+          // console.log(res.data);
           if (res.data.code === "200") {
             this.tableData = res.data.data.records;
           }

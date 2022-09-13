@@ -1,7 +1,20 @@
 <template>
   <div>
     <div id="header">
-      <el-menu class="el-menu-demo" mode="horizontal">
+      <div id="logo" @click="goToHome">
+        <img
+          src="@/assets/logo.png"
+          style="max-width: 66%; margin-left: 20px"
+        />
+      </div>
+      <el-menu
+        class="el-menu-demo"
+        mode="horizontal"
+        text-color="rgb(77,77,77)"
+      >
+        <el-menu-item index="" @click="goToOwn">
+          <el-avatar :size="40" fit="cover" :src="circleUrl"></el-avatar>
+        </el-menu-item>
         <el-menu-item index="1" @click="home"> 首页 </el-menu-item>
         <el-menu-item index="2"> 公告 </el-menu-item>
         <el-menu-item index="3"> 在线交流 </el-menu-item>
@@ -19,7 +32,7 @@
       </el-menu>
     </div>
 
-    <router-view v-if="isRouterAlive"></router-view>
+    <router-view v-if="isRouterAlive" style="margin-top: 100px"></router-view>
   </div>
 </template>
 
@@ -30,6 +43,7 @@ export default {
     return {
       username: localStorage.username,
       isRouterAlive: true,
+      circleUrl: localStorage.avatarUrl,
     };
   },
   computed: {
@@ -65,6 +79,12 @@ export default {
     enterBms() {
       this.$router.push("/bms");
     },
+    goToOwn() {
+      this.$router.push("/index/info");
+    },
+    goToHome() {
+      this.$router.push("/index/home");
+    },
 
     reload() {
       this.isRouterAlive = false;
@@ -76,9 +96,22 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 #header {
-  height: 58px;
+  height: 80px;
+  position: fixed !important;
+  background-color: rgb(255, 255, 255);
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+}
+#logo {
+  cursor: pointer;
+  float: left;
+  height: 80px;
+  width: 300px;
 }
 .el-menu-demo {
   float: right;

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-row>
+    <el-row style="margin-bottom:10px">
       <el-button round @click="addCategory"><i class="el-icon-plus"></i>新增</el-button>
       <el-input
         v-model="input"
