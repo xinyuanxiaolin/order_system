@@ -26,7 +26,7 @@
       <el-table-column prop="orderTime" label="下单时间" width="100">
       </el-table-column>
 
-      <el-table-column prop="status" label="状态" width="100">
+      <el-table-column prop="status" label="状态" width="100" >
         <template slot-scope="scope">
           <span v-if="scope.row.status === 1">待付款</span>
           <span v-if="scope.row.status === 2">已支付</span>
@@ -40,6 +40,7 @@
             @click.native.prevent="deleteRow(scope.$index, tableData)"
             type="text"
             size="small"
+            v-if="scope.row.status===1"
           >
             取消
           </el-button>
@@ -48,6 +49,8 @@
             @click.native.prevent="payRow(scope.$index, tableData)"
             type="text"
             size="small"
+            v-if="scope.row.status===1"
+
           >
             付款
           </el-button>
@@ -177,8 +180,9 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+
 #order {
-  margin: 0 100px 0 100px;
+  margin: 80px 100px 0 100px;
 }
 </style>

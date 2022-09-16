@@ -6,7 +6,7 @@
           <div class="block">
             <el-avatar
               :size="60"
-              style="border: 1px solid black"
+              style="border:3px solid rgb(232,232,237)"
               :fit="cover"
               :src="circleUrl"
               @click="changeAvatar"
@@ -140,7 +140,7 @@ export default {
 #info {
   width: 800px;
   height: 600px;
-  margin: 30px auto;
+  margin: 80px auto 0 auto;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
 }
 

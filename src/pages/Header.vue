@@ -2,18 +2,20 @@
   <div>
     <div id="header">
       <div id="logo" @click="goToHome">
-        <img
-          src="@/assets/logo.png"
-          style="max-width: 66%; margin-left: 20px"
-        />
+        <span id="logo-t">FOOD-LARGE</span>
       </div>
       <el-menu
         class="el-menu-demo"
         mode="horizontal"
-        text-color="rgb(77,77,77)"
+        text-color="rgba(19, 18, 18 )"
       >
         <el-menu-item index="" @click="goToOwn">
-          <el-avatar :size="40" fit="cover" :src="circleUrl"></el-avatar>
+          <el-avatar
+            :size="50"
+            fit="cover"
+            :src="circleUrl"
+            style="border: 2px solid rgb(232, 232, 237)"
+          ></el-avatar>
         </el-menu-item>
         <el-menu-item index="1" @click="home"> 首页 </el-menu-item>
         <el-menu-item index="2"> 公告 </el-menu-item>
@@ -32,7 +34,7 @@
       </el-menu>
     </div>
 
-    <router-view v-if="isRouterAlive" style="margin-top: 100px"></router-view>
+    <router-view v-if="isRouterAlive"></router-view>
   </div>
 </template>
 
@@ -98,9 +100,12 @@ export default {
 
 <style scoped>
 #header {
+  position: absolute;
   height: 80px;
-  position: fixed !important;
-  background-color: rgb(255, 255, 255);
+  background-color: rgba(245, 245, 245, 0.22);
+  font-weight: 500;
+  letter-spacing: 5px;
+
   top: 0;
   bottom: 0;
   left: 0;
@@ -110,19 +115,33 @@ export default {
 #logo {
   cursor: pointer;
   float: left;
-  height: 80px;
-  width: 300px;
+}
+
+#logo-t {
+  color: rgba(245, 245, 245, 0.7);
+  
+
+  font-size: 50px;
+  margin-left: 20px;
+  line-height: 80px;
 }
 .el-menu-demo {
   float: right;
+  
+}
+.el-menu-item:hover {
+  background-color: rgba(255, 255, 255, 0.5) !important;
 }
 
-#out {
-  color: skyblue;
-  padding-top: 16px;
+.el-menu {
+  background-color: transparent;
+  border: none !important;
+  height: 80px;
+  
 }
-#out:hover {
-  color: blue;
-  cursor: pointer;
+.el-menu-item {
+  height: 80px !important;
+  line-height: 80px !important;
+  
 }
 </style>

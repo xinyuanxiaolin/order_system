@@ -1,62 +1,70 @@
 <template>
-  <div id="cart">
-    <el-table
-      :data="addedGoods"
-      ref="multipleTable"
-      border
-      @select="handleSum"
-      @select-all="handleSum"
-      style="width: 100%; margin-bottom: 10px"
-    >
-      <el-table-column type="selection"> </el-table-column>
-      <el-table-column
-        prop="dishName"
-        label="菜品"
-        width="250"
-      ></el-table-column>
-      <el-table-column prop="price" label="单价" width="180">
-        <template slot-scope="scope">
-          <span>￥{{ scope.row.price }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="数量" width="180">
-        <template slot-scope="scope">
-          <span>{{ scope.row.num }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column prop="totalEach" label="小计" width="180">
-        <template slot-scope="scope">
-          {{ (scope.row.totalEach = scope.row.price * scope.row.num) }}
-        </template>
-      </el-table-column>
+  <div id="pre-cart">
+    
+    <div id="cart">
+      <el-table
+        :data="addedGoods"
+        ref="multipleTable"
+        border
+        @select="handleSum"
+        @select-all="handleSum"
+        style="width: 100%; margin-bottom: 10px"
+      >
+        <el-table-column type="selection"> </el-table-column>
+        <el-table-column label="图片">
+          <template slot-scope="scope">
+            <el-image :src="scope.row.image"></el-image>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="dishName"
+          label="菜品"
+          width="250"
+        ></el-table-column>
+        <el-table-column prop="price" label="单价" width="180">
+          <template slot-scope="scope">
+            <span>￥{{ scope.row.price }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="数量" width="180">
+          <template slot-scope="scope">
+            <span>{{ scope.row.num }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="totalEach" label="小计" width="180">
+          <template slot-scope="scope">
+            {{ (scope.row.totalEach = scope.row.price * scope.row.num) }}
+          </template>
+        </el-table-column>
 
-      <el-table-column label="操作">
-        <template slot-scope="scope">
-          <el-button
-            @click.native.prevent="deleteRow(scope.$index, addedGoods)"
-            size="mini"
-            type="danger"
-          >
-            移除
-          </el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-button
+              @click.native.prevent="deleteRow(scope.$index, addedGoods)"
+              size="mini"
+              type="danger"
+            >
+              移除
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
 
-    <div id="submit">
-      <span
-        >应付金额:<span style="color: red">￥{{ sum }}</span>
-      </span>
-      <br />
-      <br />
-      <el-button type="primary" @click="submitOrder">提交订单</el-button>
+      <div id="submit">
+        <span
+          >应付金额:<span style="color: red">￥{{ sum }}</span>
+        </span>
+        <br />
+        <br />
+        <el-button type="primary" @click="submitOrder">提交订单</el-button>
+      </div>
     </div>
+    
   </div>
 </template>
 
 <script>
 import axios from "axios";
-
 
 export default {
   name: "ShoppoingCart",
@@ -106,11 +114,10 @@ export default {
         .then(
           (res) => {
             console.log(res.data);
-            if(res.data.code==='200'){
-              this.$router.push('/index/order')
-            }
-            else if(res.data.code==='400'){
-              alert(res.data.msg)
+            if (res.data.code === "200") {
+              this.$router.push("/index/order");
+            } else if (res.data.code === "400") {
+              alert(res.data.msg);
             }
           },
           (err) => {
@@ -138,9 +145,19 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+
+
+#pre-cart{
+  position:absolute;
+   height: 750px;
+  
+}
 #cart {
-  margin: 0 300px 0 200px;
+  margin: 80px 300px 0 200px;
+  height: 400px;
+  background-color: #fff;
+ 
 }
 #submit {
   float: right;

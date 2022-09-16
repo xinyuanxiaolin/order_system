@@ -115,6 +115,8 @@ export default {
               localStorage.admin = response.data.data.admin;  
               localStorage.userId=response.data.data.id;  
               localStorage.nickname=response.data.data.nickname;
+              localStorage.avatarUrl=response.data.data.avatar_url;
+
               this.$router.push("/index");
               
             } else if (response.data.code === "600") {

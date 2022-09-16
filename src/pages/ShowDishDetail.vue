@@ -61,7 +61,11 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+*{
+  margin-top: 40px;
+}
+
 .contentClassName {
   color: red;
 }
