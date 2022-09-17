@@ -4,6 +4,7 @@ Vue.use(VueRouter);
 
 import Header from "@/pages/Header";
 import Home from "@/pages/Home";
+import Notice from '@/pages/Notice'
 import ShowDishDetail from "@/pages/ShowDishDetail";
 import ShoppingCart from "@/pages/ShoppingCart";
 import MyOrder from "@/pages/MyOrder";
@@ -16,6 +17,7 @@ import ShowAdmin from "@/pages/BMS/ShowAdmin";
 import ShowDish from "@/pages/BMS/ShowDish";
 import ShowCategory from "@/pages/BMS/ShowDishCategory";
 import ShowOrder from "@/pages/BMS/ShowOrder";
+
 
 const router = new VueRouter({
   
@@ -38,6 +40,11 @@ const router = new VueRouter({
             }
           }
         },
+        {
+          path: 'notice',
+          component:Notice
+        },
+
         {
           path: "cart",
           component: ShoppingCart,

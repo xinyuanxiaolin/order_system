@@ -18,10 +18,10 @@
           ></el-avatar>
         </el-menu-item>
         <el-menu-item index="1" @click="home"> 首页 </el-menu-item>
-        <el-menu-item index="2"> 公告 </el-menu-item>
-        <el-menu-item index="3"> 在线交流 </el-menu-item>
-        <el-menu-item index="4" @click="cart"> 购物车 </el-menu-item>
-        <el-menu-item index="5" @click="order"> 我的订单 </el-menu-item>
+        <el-menu-item index="2" @click="notice"> 公告 </el-menu-item>
+        
+        <el-menu-item index="3" @click="cart"> 购物车 </el-menu-item>
+        <el-menu-item index="4" @click="order"> 我的订单 </el-menu-item>
 
         <el-submenu index="2">
           <template slot="title">{{ username }}</template>
@@ -48,6 +48,10 @@ export default {
       circleUrl: localStorage.avatarUrl,
     };
   },
+
+ watch:{
+   
+ },
   computed: {
     admin() {
       return localStorage.admin === "1" ? true : false;
@@ -62,6 +66,9 @@ export default {
   methods: {
     home() {
       this.$router.push("/index/home");
+    },
+    notice(){
+      this.$router.push('/index/notice')
     },
     cart() {
       this.$router.push("/index/cart");
@@ -144,4 +151,5 @@ export default {
   line-height: 80px !important;
   
 }
+
 </style>

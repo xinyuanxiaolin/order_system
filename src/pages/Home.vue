@@ -2,10 +2,10 @@
   <div id="home">
     <div class="block">
       <el-carousel height="47vw">
-        <el-carousel-item v-for="item in image" :key="item.id" >
+        <el-carousel-item v-for="item in image" :key="item.id">
           <!-- <img :src="item.src" style="width: 100%; height: auto" /> -->
           <div id="des">{{ item.descrition }}</div>
-          <a href="#dish" id="toDish">开启你的点餐之旅</a>
+          <a id="toDish" @click="goDish" style="cursor:pointer;">开启你的点餐之旅</a>
           <el-image
             :src="item.src"
             style="width: 100%; height: 100%; z-index: 1"
@@ -73,6 +73,7 @@
 
 <script>
 import axios from "axios";
+
 export default {
   name: "HomeS",
 
@@ -154,6 +155,14 @@ export default {
         },
       });
     },
+
+    // 实现平滑跳转
+    goDish() {
+      this.$el.querySelector("#dish").scrollIntoView({
+        behavior: "smooth", // 平滑过渡
+        block: "start", // 上边框与视窗顶部平齐
+      });
+    },
   },
 };
 </script>
@@ -184,7 +193,6 @@ a {
   align-items: center;
 }
 #category {
-  
   display: block;
   text-align: center;
   line-height: 100px;
@@ -222,15 +230,7 @@ a {
   display: flex;
   justify-content: center;
   align-items: center;
-
-  
-
-
-
- 
 }
-
-
 
 .block {
   position: relative;
@@ -285,6 +285,7 @@ a {
   float: left;
   height: 200px;
   margin: 0 30px;
+  
 }
 
 .container {

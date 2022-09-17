@@ -8,6 +8,7 @@ import axios from 'axios'
 Vue.use(ElementUi);
 Vue.config.productionTip = false;
 
+
 // 请求头验证
 axios.interceptors.request.use(config => {
   // console.log(config);
