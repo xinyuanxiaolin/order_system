@@ -1,87 +1,94 @@
 <template>
-  <div>
+  <div class="MyOrder">
     <img src="@/assets/banner3.jpg" width="100%" height="80" />
-    <div id="order">
-      <el-table
-        :data="tableData"
-        border
-        ref="order"
-        style="font-size: 12px; width: 100%; margin-bottom: 10px"
-      >
-        <el-table-column prop="dishName" label="菜品" width="150">
-          <template slot-scope="scope">
-            <el-button type="text" @click="dialogTable(scope.row.id)"
-              >查看菜品
-            </el-button>
-          </template>
-        </el-table-column>
-        <el-table-column prop="no" label="订单编号" width="180">
-        </el-table-column>
-        <el-table-column prop="amount" label="金额" width="100">
-        </el-table-column>
-        <el-table-column prop="address" label="送货地址" width="200">
-        </el-table-column>
-        <el-table-column prop="consignee" label="收货人" width="100">
-        </el-table-column>
-        <el-table-column prop="telephone" label="联系方式" width="180">
-        </el-table-column>
-        <el-table-column prop="orderTime" label="下单时间" width="100">
-        </el-table-column>
+    <div id="pre-order">
+      <div id="order">
+        <el-table
+          :data="tableData"
+          border
+          ref="order"
+          style="
+            font-size: 12px;
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 20px;
+          "
+        >
+          <el-table-column prop="dishName" label="菜品" width="150">
+            <template slot-scope="scope">
+              <el-button type="text" @click="dialogTable(scope.row.id)"
+                >查看菜品
+              </el-button>
+            </template>
+          </el-table-column>
+          <el-table-column prop="no" label="订单编号" width="180">
+          </el-table-column>
+          <el-table-column prop="amount" label="金额" width="100">
+            <template slot-scope="scope"> ￥{{ scope.row.amount }} </template>
+          </el-table-column>
+          <el-table-column prop="address" label="送货地址" width="200">
+          </el-table-column>
+          <el-table-column prop="consignee" label="收货人" width="100">
+          </el-table-column>
+          <el-table-column prop="telephone" label="联系方式" width="180">
+          </el-table-column>
+          <el-table-column prop="orderTime" label="下单时间" width="100">
+          </el-table-column>
 
-        <el-table-column prop="status" label="状态" width="100">
-          <template slot-scope="scope">
-            <span v-if="scope.row.status === 1">待付款</span>
-            <span v-if="scope.row.status === 2">已支付</span>
-            <span v-if="scope.row.status === 3">已退款</span>
-          </template>
-        </el-table-column>
+          <el-table-column prop="status" label="状态" width="100">
+            <template slot-scope="scope">
+              <span v-if="scope.row.status === 1">待付款</span>
+              <span v-if="scope.row.status === 2">已支付</span>
+              <span v-if="scope.row.status === 3">已退款</span>
+            </template>
+          </el-table-column>
 
-        <el-table-column label="操作">
-          <template slot-scope="scope">
-            <el-button
-              @click.native.prevent="deleteRow(scope.$index, tableData)"
-              type="text"
-              size="small"
-              v-if="scope.row.status === 1"
-            >
-              取消
-            </el-button>
+          <el-table-column label="操作">
+            <template slot-scope="scope">
+              <el-button
+                @click.native.prevent="deleteRow(scope.$index, tableData)"
+                type="text"
+                size="small"
+                v-if="scope.row.status === 1"
+              >
+                取消
+              </el-button>
 
-            <el-button
-              @click.native.prevent="payRow(scope.$index, tableData)"
-              type="text"
-              size="small"
-              v-if="scope.row.status === 1"
-            >
-              付款
-            </el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <!-- 详细订单的菜品信息 -->
-      <el-dialog title="商品信息" :visible.sync="dialogTableVisible">
-        <el-table :data="goodsList" border stripe>
-          <el-table-column prop="name" label="商品名称"></el-table-column>
-          <el-table-column prop="price" label="价格"></el-table-column>
-          <el-table-column prop="num" label="数量"></el-table-column>
-
-          <el-table-column
-            prop="description"
-            label="商品描述"
-          ></el-table-column>
-          <el-table-column label="图片"
-            ><template slot-scope="scope">
-              <el-image
-                style=""
-                :src="scope.row.image"
-                :pre-src-list="[scope.row.image]"
-              ></el-image> </template
-          ></el-table-column>
+              <el-button
+                @click.native.prevent="payRow(scope.$index, tableData)"
+                type="text"
+                size="small"
+                v-if="scope.row.status === 1"
+              >
+                付款
+              </el-button>
+            </template>
+          </el-table-column>
         </el-table>
-      </el-dialog>
+        <!-- 详细订单的菜品信息 -->
+        <el-dialog title="商品信息" :visible.sync="dialogTableVisible">
+          <el-table :data="goodsList" border stripe>
+            <el-table-column prop="name" label="商品名称"></el-table-column>
+            <el-table-column prop="price" label="价格"></el-table-column>
+            <el-table-column prop="num" label="数量"></el-table-column>
 
-      <!-- 微信支付宝支付 -->
-      <!-- <el-dialog title="支付界面" :visible.sync="showPayment">
+            <el-table-column
+              prop="description"
+              label="商品描述"
+            ></el-table-column>
+            <el-table-column label="图片"
+              ><template slot-scope="scope">
+                <el-image
+                  style=""
+                  :src="scope.row.image"
+                  :pre-src-list="[scope.row.image]"
+                ></el-image> </template
+            ></el-table-column>
+          </el-table>
+        </el-dialog>
+
+        <!-- 微信支付宝支付 -->
+        <!-- <el-dialog title="支付界面" :visible.sync="showPayment">
       <el-tabs v-model="activeName">
         <el-tab-pane label="微信支付" name="first">
           <el-image
@@ -99,6 +106,7 @@
         </el-tab-pane>
       </el-tabs>
     </el-dialog> -->
+      </div>
     </div>
   </div>
 </template>
@@ -123,12 +131,32 @@ export default {
   methods: {
     deleteRow(index, rows) {
       // console.log(index, rows[index].id);
-      if (confirm("是否取消订单?")) {
+      // if (confirm("是否取消订单?")) {
+      //   axios.delete(`http://localhost:8080/api/orders/${rows[index].id}`).then(
+      //     (res) => {
+      //       // console.log(res.data)
+      //       if (res.data.code === "200") {
+      //         alert("取消成功!");
+      //         this.reload();
+      //       }
+      //     },
+      //     (err) => {
+      //       console.log(err.message);
+      //     }
+      //   );
+      // }
+
+      this.$confirm("是否取消订单支付?", "提示", {
+        type: "warning",
+        confirmButtonText: "是",
+        cancelButtonText: "否",
+      }).then(() => {
         axios.delete(`http://localhost:8080/api/orders/${rows[index].id}`).then(
           (res) => {
             // console.log(res.data)
             if (res.data.code === "200") {
-              alert("取消成功!");
+              // alert("取消成功!");
+              this.$message("取消成功");
               this.reload();
             }
           },
@@ -136,7 +164,7 @@ export default {
             console.log(err.message);
           }
         );
-      }
+      });
     },
 
     payRow(index, rows) {
@@ -186,7 +214,31 @@ export default {
 </script>
 
 <style scoped>
+.MyOrder {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: -webkit-repeating-linear-gradient(
+    rgba(234, 232, 235, 0.75),
+    rgba(224, 231, 234, 0.75)
+  );
+}
+
 #order {
-  margin: 80px 100px 0 100px;
+  margin: 80px 100px 20px 100px;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
+  border-radius: 20px;
+}
+.el-table {
+  border-radius: 20px;
+}
+
+#pre-order {
+  background: -webkit-repeating-linear-gradient(
+    rgba(234, 232, 235, 0.75),
+    rgba(224, 231, 234, 0.75)
+  );
 }
 </style>

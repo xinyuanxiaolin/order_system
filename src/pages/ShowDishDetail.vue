@@ -10,16 +10,14 @@
         alt="..."
         style="width: 200px; height: 200px"
       />
-      <el-descriptions title="菜品详情" direction=" horizontal" :column="1" >
+      <el-descriptions title="菜品详情" direction=" horizontal" :column="1">
         <el-descriptions-item label="菜品名">{{
           dish.name
         }}</el-descriptions-item>
-        <el-descriptions-item
-          label="描述"
-          contentClassName="contentClassName"
-          >{{ dish.description }}</el-descriptions-item
-        >
-        <el-descriptions-item label="价格" contentClassName="contentClassName"
+        <el-descriptions-item label="描述">{{
+          dish.description
+        }}</el-descriptions-item>
+        <el-descriptions-item label="价格" contentStyle="color:red"
           >￥{{ dish.price }}</el-descriptions-item
         >
         <el-descriptions-item label="数量">
@@ -33,25 +31,27 @@
       @click="addShoppingCart"
       >加入购物车</el-button
     >
-     <img
-        :src="dish.image"
-        class="img-thumbnail"
-        alt="..."
-        style="width: 50px; height: 50px; margin-top:3px;margin-right:20px;"
-      />
+    <img
+      :src="dish.image"
+      class="img-thumbnail"
+      alt="..."
+      style="width: 50px; height: 50px; margin-top: 3px; margin-right: 20px"
+    />
   </div>
 </template>
 
 <script>
 import axios from "axios";
 export default {
-  name: "SHowDishDetail",
+  name: "ShowDishDetail",
   props: ["dish"],
   data() {
     return {
       num: 1,
+      dishs: [],
     };
   },
+
   methods: {
     addShoppingCart() {
       // console.log('gfgg')
@@ -65,12 +65,11 @@ export default {
           (res) => {
             // console.log(res.data)
             if (res.data.code === "200") {
-              this.$message('加入成功!')
+              this.$message("加入成功!");
             }
           },
           (err) => {
             console.log(err.message);
-            
           }
         );
     },
@@ -78,12 +77,21 @@ export default {
 };
 </script>
 
-<style >
-.contentClassName {
-  color: red;
+<style scoped>
+.container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
 }
 
-.el-descriptions{
+.el-descriptions {
   margin-left: 20px;
+}
+
+.img-thumbnail {
+  object-fit: cover;
+  vertical-align: top;
+  width: 100%;
+  height: 100%;
 }
 </style>

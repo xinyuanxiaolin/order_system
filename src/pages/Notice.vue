@@ -5,6 +5,7 @@
     </div>
     <div class="bor">
       <div class="text">
+         <div style="font-size:30px;font-weight:800;padding:10px;text-align:center;">更新日志</div>
         <el-collapse>
           <el-collapse-item  title="2022.9.17更新" name="1">
             <div>
@@ -61,21 +62,24 @@ export default {
 }
 .bor {
   position: absolute;
-  margin-top: 10px;
+  padding-top: 10px;
   width: 100%;
   height: 100%;
   background-size: cover;
+ background: -webkit-repeating-linear-gradient(rgba(234,232,235,0.75),rgba(224,231,234,0.75));
+
 }
 .text {
   position: relative;
-  width: 1100px;
-  height: 100%;
+  width: 50%;
+  height: 80%;
   margin: auto;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
   background-color: #fff;
+  border-radius: 20px;;
 }
 
 </style>

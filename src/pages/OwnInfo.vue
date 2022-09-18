@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="OwnInfo">
     <img src="@/assets/banner3.jpg" width="100%" height="80" />
 
     <div class="ownInfo">
@@ -181,12 +181,21 @@ export default {
 </script>
 
 
-<style >
+<style  scoped>
+#OwnInfo{
+  position: absolute;
+  width: 100%;
+  height: 100%; 
+ background: -webkit-repeating-linear-gradient(rgba(234,232,235,0.75),rgba(224,231,234,0.75));
+
+}
 #info {
   width: 800px;
   height: 600px;
-  margin: 80px auto 0 auto;
+  margin: 40px auto 20px auto;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
+  background-color: #fff;
+  border-radius: 20px;
 }
 
 #image {

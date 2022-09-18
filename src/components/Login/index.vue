@@ -33,7 +33,7 @@
     <div class="form-container sing-in-container">
       <!-- 登陆 -->
 
-      <form >
+      <form>
         <h1>用户登陆</h1>
         <div class="social-container">
           <a href="#" class="social"><i class="iconfont icon-QQ"></i></a>
@@ -112,13 +112,14 @@ export default {
               console.log("请求成功了", response.data);
               localStorage.token = response.data.data.token;
               localStorage.username = response.data.data.username;
-              localStorage.admin = response.data.data.admin;  
-              localStorage.userId=response.data.data.id;  
-              localStorage.nickname=response.data.data.nickname;
-              localStorage.avatarUrl=response.data.data.avatar_url;
-
-              this.$router.push("/index");
-              
+              localStorage.admin = response.data.data.admin;
+              localStorage.userId = response.data.data.id;
+              localStorage.nickname = response.data.data.nickname;
+              localStorage.avatarUrl = response.data.data.avatar_url;
+              this.$message("登陆成功");
+              setTimeout(() => {
+                this.$router.push("/index");
+              }, 1500);
             } else if (response.data.code === "600") {
               alert(response.data.msg);
             } else if (response.data.code === "400") {
@@ -391,5 +392,4 @@ button.ghost:active {
   transform: translateX(20%);
   transition: all 0.6s ease-in-out;
 }
-
 </style>

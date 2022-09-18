@@ -148,6 +148,7 @@ export default {
 
     goDishDetail(dish) {
       // console.log('hhh');
+      console.log(dish)
       this.$router.push({
         name: "detail",
         params: {
@@ -173,6 +174,7 @@ a {
 }
 
 .dish {
+ position: relative;
   margin-top: 20px;
 }
 .dish-head {
@@ -210,9 +212,12 @@ a {
 }
 
 .dish-detail {
+ 
   display: flex;
+  flex-wrap: wrap;
+  min-height: 300px;
   justify-content: center;
-  height: 300px;
+  
 
   /* align-items: center; */
 }
