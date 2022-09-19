@@ -1,66 +1,76 @@
 <template>
-  <div class="container" ref="container">
-    <link rel="stylesheet" href="" />
-    <div class="form-container sign-up-container">
-      <!-- 注册 -->
-      <form action="#">
-        <h1>用户注册</h1>
-        <div class="social-container">
-          <a href="#" class="social"><i class="iconfont icon-QQ"></i></a>
-          <a href="#" class="social"><i class="iconfont icon-weixin"></i></a>
-          <a href="#" class="social"
-            ><i class="iconfont icon-xinlangweibo"></i
-          ></a>
-        </div>
-        <span>可以选择以上几种方式注册一个账户!</span>
-        <input type="text" placeholder="用户名" v-model="sign_up.username" />
-        <input
-          type="number"
-          placeholder="电话号码"
-          v-model="sign_up.telephone"
-        />
-        <input type="password" placeholder="密码" v-model="sign_up.password" />
-        <input
-          type="password"
-          placeholder="确认密码"
-          v-model="sign_up.tpassword"
-        />
-        <!-- <button id="send_code">发送验证码</button>
+  <div class="denglu">
+    <div class="container" ref="container">
+      <link rel="stylesheet" href="" />
+      <div class="form-container sign-up-container">
+        <!-- 注册 -->
+        <form action="#">
+          <h1>用户注册</h1>
+          <div class="social-container">
+            <a href="#" class="social"><i class="iconfont icon-QQ"></i></a>
+            <a href="#" class="social"><i class="iconfont icon-weixin"></i></a>
+            <a href="#" class="social"
+              ><i class="iconfont icon-xinlangweibo"></i
+            ></a>
+          </div>
+          <span>可以选择以上几种方式注册一个账户!</span>
+          <input type="text" placeholder="用户名" v-model="sign_up.username" />
+          <input
+            type="number"
+            placeholder="电话号码"
+            v-model="sign_up.telephone"
+          />
+          <input
+            type="password"
+            placeholder="密码"
+            v-model="sign_up.password"
+          />
+          <input
+            type="password"
+            placeholder="确认密码"
+            v-model="sign_up.tpassword"
+          />
+          <!-- <button id="send_code">发送验证码</button>
         <input type="number" placeholder="验证码" /> -->
-        <button @click="register">注册</button>
-      </form>
-    </div>
-    <div class="form-container sing-in-container">
-      <!-- 登陆 -->
+          <button @click="register">注册</button>
+        </form>
+      </div>
+      <div class="form-container sing-in-container">
+        <!-- 登陆 -->
 
-      <form>
-        <h1>用户登陆</h1>
-        <div class="social-container">
-          <a href="#" class="social"><i class="iconfont icon-QQ"></i></a>
-          <a href="#" class="social"><i class="iconfont icon-weixin"></i></a>
-          <a href="#" class="social"
-            ><i class="iconfont icon-xinlangweibo"></i
-          ></a>
-        </div>
-        <span>可以选择以上几种方式登陆您的账户!</span>
-        <input type="text" placeholder="用户名" v-model="sign_in.username" />
-        <input type="password" placeholder="密码" v-model="sign_in.password" />
-        <a href="#">忘记密码?</a>
-        <button @click="login">登陆</button>
-      </form>
-    </div>
-    <!-- 侧边栏内容 -->
-    <div class="overlay-container">
-      <div class="overlay">
-        <div class="overlay-pannel overlay-left">
-          <h1>已有账号?</h1>
-          <p>朋友，快来登录。</p>
-          <button class="ghost" @click="signIn">登陆</button>
-        </div>
-        <div class="overlay-pannel overlay-right">
-          <h1>没有帐号？</h1>
-          <p>快去注册，朋友。</p>
-          <button class="ghost" @click="signUp">注册</button>
+        <form>
+          <h1>用户登陆</h1>
+          <div class="social-container">
+            <a href="#" class="social"><i class="iconfont icon-QQ"></i></a>
+            <a href="#" class="social"><i class="iconfont icon-weixin"></i></a>
+            <a href="#" class="social"
+              ><i class="iconfont icon-xinlangweibo"></i
+            ></a>
+          </div>
+          <span>可以选择以上几种方式登陆您的账户!</span>
+          <input type="text" placeholder="用户名" v-model="sign_in.username" />
+          <input
+            type="password"
+            placeholder="密码"
+            v-model="sign_in.password"
+          />
+          <a href="#">忘记密码?</a>
+          <button @click="login">登陆</button>
+        </form>
+      </div>
+      <!-- 侧边栏内容 -->
+      <div class="overlay-container">
+        <div class="overlay">
+          <div class="overlay-pannel overlay-left">
+            <h1>已有账号?</h1>
+            <p>朋友，快来登录。</p>
+            <button class="ghost" @click="signIn">登陆</button>
+          </div>
+          <div class="overlay-pannel overlay-right">
+            <h1>没有帐号？</h1>
+            <p>快去注册，朋友。</p>
+            <button class="ghost" @click="signUp">注册</button>
+          </div>
         </div>
       </div>
     </div>
@@ -146,13 +156,13 @@ export default {
           (response) => {
             console.log("请求成功", response.data);
             if (response.data.code === "400") {
-              return alert(response.data.msg);
+              return this.$alert(response.data.msg);
             }
             // 用户已存在
             else if (response.data.code === "600") {
-              return alert(response.data.msg);
+              return this.$alert(response.data.msg);
             } else if (response.data.code === "200") {
-              return alert("注册成功");
+              return this.$alert("注册成功");
             }
           },
           (error) => {
@@ -165,6 +175,15 @@ export default {
 </script>
 
 <style scoped>
+.denglu{
+  position: relative;
+  height: 720px;
+    background: -webkit-repeating-linear-gradient(
+    rgba(234, 232, 235, 0.75),
+    rgba(224, 231, 234, 0.75)
+  );
+  
+}
 h1 {
   margin: 0.2rem;
   font-size: 1.2rem;

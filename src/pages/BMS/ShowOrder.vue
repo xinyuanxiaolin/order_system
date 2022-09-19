@@ -126,24 +126,26 @@ export default {
 
     deleteRow(index, rows) {
       //   console.log(index, rows[index].id);
-      if (confirm("确定是否移除?")) {
-        axios
-          .delete(`http://localhost:8080/api/orders/${rows[index].id}`)
-          .then(
-            (res) => {
-              // console.log(res.data);
-              if (res.data.code === "200") {
-                alert("删除成功!");
-                this.reload();
-              } else {
-                alert("出现未知错误,请重试!");
-              }
-            },
-            (err) => {
-              console.log(err);
+      this.$confirm("是否移除?", "提示", {
+        type: "warning",
+        confirmButtonText: "是",
+        cancelButtonText: "否",
+      }).then(() => {
+        axios.delete(`http://localhost:8080/api/orders/${rows[index].id}`).then(
+          (res) => {
+            // console.log(res.data);
+            if (res.data.code === "200") {
+              this.$message("删除成功!");
+              this.reload();
+            } else {
+              this.$alert("出现未知错误,请重试!");
             }
-          );
-      }
+          },
+          (err) => {
+            console.log(err);
+          }
+        );
+      });
     },
 
     // 执行搜索

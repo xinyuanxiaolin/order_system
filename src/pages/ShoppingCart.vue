@@ -38,7 +38,7 @@
             </el-table-column>
             <el-table-column prop="totalEach" label="小计" width="180">
               <template slot-scope="scope">
-                ￥{{ (scope.row.totalEach = scope.row.price * scope.row.num) }}
+                ￥{{ (scope.row.totalEach = (scope.row.price * scope.row.num).toFixed(2)) }}
               </template>
             </el-table-column>
 

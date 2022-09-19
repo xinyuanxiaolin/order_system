@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-row style="margin-bottom:10px">
+    <el-row style="margin-bottom: 10px">
       <el-button round @click="addDish"
         ><i class="el-icon-plus"></i> 新增</el-button
       >
@@ -59,12 +59,7 @@
     </el-pagination>
 
     <!-- 增加的方框 -->
-    <div id="addForm" v-show="showDish">
-      <i
-        class="el-icon-close"
-        @click="closeWindow"
-        style="float: right; margin-right: 5px; font-size: 20px"
-      ></i>
+    <el-dialog title="新增菜品" :visible.sync="dialogFormVisible">
       <br />
       <el-radio-group v-model="labelPosition" size="small">
         <el-radio-button label="left">左对齐</el-radio-button>
@@ -119,7 +114,7 @@
           >确认添加</el-button
         >
       </el-form>
-    </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -151,6 +146,8 @@ export default {
       fileList: [],
       // 开关窗口
       showDish: false,
+      // 新增菜品窗口
+      dialogFormVisible: false,
 
       // 图片的地址
       url: "",
@@ -199,24 +196,28 @@ export default {
 
     deleteRow(index, rows) {
       //   console.log(index, rows[index].id);
-      if (confirm("确定是否移除?")) {
+      this.$confirm("是否移除?", "提示", {
+        type: "warning",
+        confirmButtonText: "是",
+        cancelButtonText: "否",
+      }).then(() => {
         axios
           .delete(`http://localhost:8080/api/dish/del/${rows[index].id}`)
           .then(
             (res) => {
               // console.log(res.data);
               if (res.data.code === "200") {
-                alert("删除成功!");
+                this.$message("删除成功!");
                 this.reload();
               } else {
-                alert("出现未知错误,请重试!");
+                this.$alert("出现未知错误,请重试!");
               }
             },
             (err) => {
               console.log(err);
             }
           );
-      }
+      });
     },
 
     beforeUpload(file) {
@@ -276,7 +277,7 @@ export default {
 
     // 打开新增窗口
     addDish() {
-      this.showDish = true;
+      this.dialogFormVisible = true;
     },
 
     // 关闭新增窗口

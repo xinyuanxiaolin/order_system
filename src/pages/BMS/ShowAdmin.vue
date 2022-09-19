@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-row style="margin-bottom:10px">
+    <el-row style="margin-bottom: 10px">
       <el-button round @click="addUser"
         ><i class="el-icon-plus"></i> 新增</el-button
       >
@@ -87,25 +87,21 @@
             <el-option label="女" value="女"></el-option>
           </el-select>
         </el-form-item>
-          <el-form-item label="管理员" :label-width="formLabelWidth">
-          <el-select v-model="editTable.admin"  placeholder="请选择">
-            <el-option label="是" value=1></el-option>
-            <el-option label="否" value=0></el-option>
+        <el-form-item label="管理员" :label-width="formLabelWidth">
+          <el-select v-model="editTable.admin" placeholder="请选择">
+            <el-option label="是" value="1"></el-option>
+            <el-option label="否" value="0"></el-option>
           </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="comfirmChange"
-          >确 定</el-button
-        >
+        <el-button type="primary" @click="comfirmChange">确 定</el-button>
       </div>
     </el-dialog>
 
     <!-- 增加的方框 -->
-    <el-dialog title="用户编辑" :visible.sync="dialogAddFormVisible"> 
-   
-   
+    <el-dialog title="用户编辑" :visible.sync="dialogAddFormVisible">
       <el-radio-group v-model="labelPosition" size="small">
         <el-radio-button label="left">左对齐</el-radio-button>
         <el-radio-button label="right">右对齐</el-radio-button>
@@ -170,7 +166,6 @@
         >
       </el-form>
     </el-dialog>
-   
   </div>
 </template>
 
@@ -202,17 +197,16 @@ export default {
       },
       // 图片文件
       fileList: [],
-     
 
       // 图片的地址
       url: "",
       // 新增方框的显示
-      dialogAddFormVisible:false,
+      dialogAddFormVisible: false,
       // 编辑方框显示
       dialogFormVisible: false,
       formLabelWidth: "120px",
       editTable: {
-        id:null,
+        id: null,
         telephone: "",
         nickname: "",
         address: "",
@@ -272,15 +266,16 @@ export default {
       this.editTable.telephone = user.telephone;
       this.editTable.sex = user.sex;
       // this.editTable.admin = user.admin;
-      this.editTable.id=user.id;
+      this.editTable.id = user.id;
     },
     // 在编辑的时候确认修改
-    comfirmChange(){
+    comfirmChange() {
       axios
         .post(`http://localhost:8080/api/user/save  `, {
-          id:this.editTable.id,     
+          id: this.editTable.id,
           address: this.editTable.address,
           telephone: this.editTable.telephone,
+          nickname:this.editTable.nickname,
           sex: this.editTable.sex,
           admin: this.editTable.admin,
           // avatar_url: this.url,
@@ -289,40 +284,43 @@ export default {
           (res) => {
             console.log(res.data);
             if (res.data.code === "200") {
-              alert("修改成功!");
+              this.$message("修改成功!");
               this.reload();
             } else if (res.data.code === "600") {
-              alert(res.data.msg);
+              this.$alert(res.data.msg);
             } else if (res.data.code === "400") {
-              alert(res.data.msg);
+              this.$alert(res.data.msg);
             }
           },
           (err) => {
             console.log(err.message);
           }
         );
-      
-      
     },
 
     deleteRow(index, rows) {
       //   console.log(index, rows[index].id);
-      if (confirm("确定是否移除?")) {
+
+      this.$confirm("确定是否移除?", "提示", {
+        type: "warning",
+        confirmButtonText: "是",
+        cancelButtonText: "否",
+      }).then(() => {
         axios.delete(`http://localhost:8080/api/user/${rows[index].id}`).then(
           (res) => {
             // console.log(res.data);
             if (res.data.code === "200") {
-              alert("删除成功!");
+              this.$message("移除成功!");
               this.reload();
             } else {
-              alert("出现未知错误,请重试!");
+              this.$message("出现未知错误,请重试!");
             }
           },
           (err) => {
             console.log(err);
           }
         );
-      }
+      });
     },
 
     // !!!!!!!!!!!!!!!!!!!!!!!
@@ -336,7 +334,6 @@ export default {
       // 上传
       // this.$refs.upload.submit();
       // console.log(this.url);
-     
 
       axios
         .post(`http://localhost:8080/api/user/save  `, {
@@ -368,10 +365,8 @@ export default {
 
     // 打开新增窗口
     addUser() {
-       this.dialogAddFormVisible=true;
+      this.dialogAddFormVisible = true;
     },
-
-
 
     // 执行搜索
     confirmSearch() {},

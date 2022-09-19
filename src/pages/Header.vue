@@ -2,7 +2,7 @@
   <div>
     <div id="header">
       <div id="logo" @click="goToHome">
-        <span id="logo-t">FOOD-LARGE</span>
+        <span id="logo-t">食界之大</span>
       </div>
       <el-menu
         class="el-menu-demo"
@@ -19,7 +19,7 @@
         </el-menu-item>
         <el-menu-item index="1" @click="home"> 首页 </el-menu-item>
         <el-menu-item index="2" @click="notice"> 公告 </el-menu-item>
-        
+
         <el-menu-item index="3" @click="cart"> 购物车 </el-menu-item>
         <el-menu-item index="4" @click="order"> 我的订单 </el-menu-item>
 
@@ -49,9 +49,7 @@ export default {
     };
   },
 
- watch:{
-   
- },
+  watch: {},
   computed: {
     admin() {
       return localStorage.admin === "1" ? true : false;
@@ -67,8 +65,8 @@ export default {
     home() {
       this.$router.push("/index/home");
     },
-    notice(){
-      this.$router.push('/index/notice')
+    notice() {
+      this.$router.push("/index/notice");
     },
     cart() {
       this.$router.push("/index/cart");
@@ -106,6 +104,11 @@ export default {
 </script>
 
 <style scoped>
+@font-face {
+  font-family: fa;
+  src: url("@/font/1657153233829877.ttf");
+}
+
 #header {
   position: absolute;
   height: 80px;
@@ -126,15 +129,15 @@ export default {
 
 #logo-t {
   color: rgba(245, 245, 245, 0.7);
-  
+  font-family: fa;
 
+  font-weight: 500;
   font-size: 50px;
   margin-left: 20px;
-  line-height: 80px;
+  line-height: 100px;
 }
 .el-menu-demo {
   float: right;
-  
 }
 .el-menu-item:hover {
   background-color: rgba(255, 255, 255, 0.5) !important;
@@ -144,12 +147,9 @@ export default {
   background-color: transparent;
   border: none !important;
   height: 80px;
-  
 }
 .el-menu-item {
   height: 80px !important;
   line-height: 80px !important;
-  
 }
-
 </style>

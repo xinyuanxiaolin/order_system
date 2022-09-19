@@ -5,7 +5,9 @@
         <el-carousel-item v-for="item in image" :key="item.id">
           <!-- <img :src="item.src" style="width: 100%; height: auto" /> -->
           <div id="des">{{ item.descrition }}</div>
-          <a id="toDish" @click="goDish" style="cursor:pointer;">开启你的点餐之旅</a>
+          <a id="toDish" @click="goDish" style="cursor: pointer"
+            >开启你的点餐之旅</a
+          >
           <el-image
             :src="item.src"
             style="width: 100%; height: 100%; z-index: 1"
@@ -27,9 +29,15 @@
       </div>
 
       <div class="dish-detail">
-        <div class="dish-body" v-for="dish in dishs" :key="dish.id">
-          <span class="demonstration">{{ dish.name }}</span>
-          <br />
+        <div
+          class="dish-body"
+          v-for="(dish, index) in dishs"
+          :key="dish.id"
+          @mouseenter="mouseEnter(index)"
+          @mouseout="mouseOut(index)"
+        >
+          <span class="demonstration" ref="demo">{{ dish.name }}</span>
+
           <el-image
             @click="goDishDetail(dish)"
             style="width: 100px; height: 100px; cursor: pointer"
@@ -148,7 +156,7 @@ export default {
 
     goDishDetail(dish) {
       // console.log('hhh');
-      console.log(dish)
+      console.log(dish);
       this.$router.push({
         name: "detail",
         params: {
@@ -164,6 +172,24 @@ export default {
         block: "start", // 上边框与视窗顶部平齐
       });
     },
+
+    // 实现鼠标移动到图片上出现字体
+    mouseEnter(index) {
+      // console.log(this.$refs);
+      // console.log(index);
+      this.$refs.demo[index].style.display = "block";
+
+      setTimeout(() => {
+        this.$refs.demo[index].style.transform = "translateY(110px)";
+      }, 10);
+    },
+    mouseOut(index) {
+      this.$refs.demo[index].style.transform = "translateY(0)";
+
+      setTimeout(() => {
+        this.$refs.demo[index].style.display = "none";
+      }, 400);
+    },
   },
 };
 </script>
@@ -174,7 +200,7 @@ a {
 }
 
 .dish {
- position: relative;
+  position: relative;
   margin-top: 20px;
 }
 .dish-head {
@@ -212,30 +238,48 @@ a {
 }
 
 .dish-detail {
- 
   display: flex;
+  font-size: 20px;
   flex-wrap: wrap;
   min-height: 300px;
   justify-content: center;
-  
 
   /* align-items: center; */
 }
 
 .dish-detail .el-image {
-  width: 200px !important;
-  height: 200px !important;
+  width: 400px !important;
+  height: 300px !important;
 }
 
 .dish-body {
   margin: 10px;
+  height: 400px;
+  position: relative;
 }
 
 .demonstration {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  position: absolute;
+  display: none;
+  width: 200px;
+  height: 20px;
+  font-size: 30px;
+  font-weight: 800;
+  color: rgb(255, 255, 255);
+  letter-spacing: 10px;
+  top: -30px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+  margin: 0 auto;
+
+  transition: all 0.5s ease;
+  z-index: 10;
 }
+/* .demonstration:hover {
+  top: 80px;
+} */
 
 .block {
   position: relative;
@@ -290,7 +334,6 @@ a {
   float: left;
   height: 200px;
   margin: 0 30px;
-  
 }
 
 .container {
