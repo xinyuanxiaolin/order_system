@@ -1,6 +1,6 @@
 <template>
   <div class="shoppingCart">
-    <img src="@/assets/banner3.jpg" width="100%" height="80" />
+    <img src="@/assets/banner3.jpg" width="100%" height="60" />
     <div id="pre-cart">
       <div id="cart">
         <el-tag type="info" style="font-size: 20px; margin: 20px"
@@ -174,6 +174,8 @@ export default {
 <style scoped>
 .shoppingCart {
   position: absolute;
+   min-width: 1190px;
+
   width: 100%;
   height: 100%;
   background: -webkit-repeating-linear-gradient(

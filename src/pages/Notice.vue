@@ -1,7 +1,7 @@
 <template>
   <div class="notice">
     <div class="img" style="">
-      <img src="@/assets/banner3.jpg" width="100%" height="80" />
+      <img src="@/assets/banner3.jpg" width="100%" height="60" />
     </div>
     <div class="bor">
       <div class="text">
@@ -57,12 +57,15 @@ export default {
   position: absolute;
   width: 100%;
   height: 100%;
+  min-width: 1190px;
+ background: -webkit-repeating-linear-gradient(rgba(234,232,235,0.75),rgba(224,231,234,0.75));
+
 }
 .bor {
   position: absolute;
   padding-top: 10px;
   width: 100%;
-  height: 100%;
+  
   background-size: cover;
  background: -webkit-repeating-linear-gradient(rgba(234,232,235,0.75),rgba(224,231,234,0.75));
 
@@ -71,7 +74,8 @@ export default {
   position: relative;
   width: 50%;
   height: 80%;
-  margin: auto;
+  margin: 3rem auto 3rem auto;
+  padding: 5rem;
   top: 0;
   bottom: 0;
   left: 0;

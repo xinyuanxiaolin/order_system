@@ -30,7 +30,7 @@
           <el-image :src="scope.row.image"></el-image>
         </template>
       </el-table-column>
-      <el-table-column prop="price" label="价格" width="200"> </el-table-column>
+      <el-table-column prop="price" label="价格" > </el-table-column>
 
       <el-table-column fixed="right" label="操作" width="120">
         <template slot-scope="scope">

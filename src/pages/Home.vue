@@ -1,8 +1,12 @@
 <template>
   <div id="home">
-    <div class="block">
-      <el-carousel height="47vw">
-        <el-carousel-item v-for="item in image" :key="item.id">
+    <div class="pre-home">
+      <el-carousel height="47vw" >
+        <el-carousel-item
+          v-for="item in image"
+          :key="item.id"
+          style="font-size: 50px"
+        >
           <!-- <img :src="item.src" style="width: 100%; height: auto" /> -->
           <div id="des">{{ item.descrition }}</div>
           <a id="toDish" @click="goDish" style="cursor: pointer"
@@ -10,7 +14,7 @@
           >
           <el-image
             :src="item.src"
-            style="width: 100%; height: 100%; z-index: 1"
+            style="width: 100%; height: 100%; z-index: 1;filter:brightness(0.8);"
           ></el-image>
         </el-carousel-item>
       </el-carousel>
@@ -31,16 +35,14 @@
       <div class="dish-detail">
         <div
           class="dish-body"
-          v-for="(dish, index) in dishs"
+          v-for="dish in dishs"
           :key="dish.id"
-          @mouseenter="mouseEnter(index)"
-          @mouseout="mouseOut(index)"
+          @click="goDishDetail(dish)"
         >
           <span class="demonstration" ref="demo">{{ dish.name }}</span>
-
+          <div class="mask"></div>
           <el-image
-            @click="goDishDetail(dish)"
-            style="width: 100px; height: 100px; cursor: pointer"
+            style="cursor: pointer"
             :src="dish.image"
             fit="cover"
           ></el-image>
@@ -98,6 +100,13 @@ export default {
           src: require("../assets/banner2.jpg"),
           descrition: "Enjoy youself!",
         },
+          {
+          id: 2,
+          src: require("../assets/banner4.jpg"),
+          descrition: "干净! 卫生! 菜品新鲜!",
+        },
+
+
         // { id: 2, src: require("../assets/miku黑白.png") },
       ],
       // 菜品名
@@ -174,22 +183,22 @@ export default {
     },
 
     // 实现鼠标移动到图片上出现字体
-    mouseEnter(index) {
-      // console.log(this.$refs);
-      // console.log(index);
-      this.$refs.demo[index].style.display = "block";
+    // mouseEnter(index) {
+    //   // console.log(this.$refs);
+    //   // console.log(index);
+    //   this.$refs.demo[index].style.display = "block";
 
-      setTimeout(() => {
-        this.$refs.demo[index].style.transform = "translateY(110px)";
-      }, 10);
-    },
-    mouseOut(index) {
-      this.$refs.demo[index].style.transform = "translateY(0)";
+    //   setTimeout(() => {
+    //     this.$refs.demo[index].style.transform = "translateY(110px)";
+    //   }, 10);
+    // },
+    // mouseOut(index) {
+    //   this.$refs.demo[index].style.transform = "translateY(0)";
 
-      setTimeout(() => {
-        this.$refs.demo[index].style.display = "none";
-      }, 400);
-    },
+    //   setTimeout(() => {
+    //     this.$refs.demo[index].style.display = "none";
+    //   }, 400);
+    // },
   },
 };
 </script>
@@ -248,19 +257,33 @@ a {
 }
 
 .dish-detail .el-image {
+  transition: all 0.5s;
+
   width: 400px !important;
   height: 300px !important;
 }
 
 .dish-body {
   margin: 10px;
-  height: 400px;
+  cursor: pointer;
+  height: 300px;
   position: relative;
+  overflow: hidden;
+}
+
+.mask {
+  position: absolute;
+  width: 400px;
+  height: 300px;
+  opacity: 0;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.6), transparent);
+  transition: all 0.5s;
+  z-index: 1;
 }
 
 .demonstration {
   position: absolute;
-  display: none;
+  display: block;
   width: 200px;
   height: 20px;
   font-size: 30px;
@@ -273,53 +296,64 @@ a {
   right: 0;
   text-align: center;
   margin: 0 auto;
-
+  opacity: 0;
   transition: all 0.5s ease;
   z-index: 10;
+}
+
+.dish-body:hover .demonstration {
+  transform: translateY(130px);
+  opacity: 1;
+}
+.dish-body:hover .mask {
+  opacity: 1;
+}
+
+.dish-body:hover .el-image {
+  transform: scale(1.2);
 }
 /* .demonstration:hover {
   top: 80px;
 } */
 
-.block {
+.pre-home {
   position: relative;
-
-  left: 0;
-  right: 0;
-  margin: auto;
-  max-width: 100%;
 }
 
 #des {
-  font-size: 50px;
+  font-size: 1em;
   position: absolute;
-  top: 300px;
-  margin-left: 432px;
-  margin-right: auto;
+  width: 100%;
+  text-align: center;
+  top: 6em;
 
   color: rgb(255, 255, 255);
   font-weight: 500;
-  letter-spacing: 14px;
+  letter-spacing: 0.875rem;
   text-transform: uppercase;
 
   z-index: 99;
 }
 
 #toDish {
+  position: absolute;
   font-size: 20px;
   color: rgb(251, 250, 250);
   font-weight: 800;
   letter-spacing: 5px;
-  width: 300px;
-  height: 50px;
-  line-height: 50px;
+  width: 18em;
+  height: 2.5em;
+  line-height: 2.5em;
   text-align: center;
-  position: absolute;
+
   display: block;
+  border-radius: 0.5em;
   border: 1px solid rgba(255, 255, 255, 0.7);
   background-color: rgba(255, 255, 255, 0.27);
-  top: 400px;
-  margin-left: 606px;
+  top: 20em;
+  left: 0;
+  right: 0;
+  margin: auto;
 
   z-index: 99;
 }
@@ -334,12 +368,17 @@ a {
   float: left;
   height: 200px;
   margin: 0 30px;
+  width: 25%;
 }
 
 .container {
-  width: 1170px;
-  height: 200px;
+  height: 300px;
   margin: auto;
+  /* position: relative; */
+  display: flex;
+  justify-content: space-around;
+  flex-shrink: 0;
+
   padding: 0 15px 0 15px;
 }
 
@@ -356,8 +395,6 @@ a {
   font-size: 1em;
   line-height: 1.8em;
   color: #999;
-
-  width: 200px;
 }
 
 p {
@@ -367,4 +404,6 @@ p {
   margin-inline-start: 0px;
   margin-inline-end: 0px;
 }
+
+
 </style>

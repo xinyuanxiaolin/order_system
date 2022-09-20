@@ -2,7 +2,7 @@
   <!-- 主体 -->
 
   <div class="container">
-    <img src="@/assets/banner3.jpg" width="100%" height="80" />
+    <img src="@/assets/banner3.jpg" width="100%" height="60" />
     <div class="show-detail">
       <div style="display: flex">
         <img
@@ -28,14 +28,17 @@
               :min="1"
             ></el-input-number
           ></el-descriptions-item>
+          <el-descriptions-item label="操作">
+            <el-button
+              size="small"
+              
+              @click="addShoppingCart"
+              >加入购物车</el-button
+            >
+          </el-descriptions-item>
         </el-descriptions>
       </div>
-      <el-button
-        size="small"
-        style="position: relative; top: -23px; left: 208px"
-        @click="addShoppingCart"
-        >加入购物车</el-button
-      >
+
       <img
         :src="dish.image"
         class="img-thumbnail"
@@ -86,6 +89,8 @@ export default {
 <style scoped>
 .container {
   position: absolute;
+  min-width: 1190px;
+
   width: 100%;
   height: 100%;
   background: -webkit-repeating-linear-gradient(

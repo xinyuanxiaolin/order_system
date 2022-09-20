@@ -1,6 +1,6 @@
 <template>
   <div class="MyOrder">
-    <img src="@/assets/banner3.jpg" width="100%" height="80" />
+    <img src="@/assets/banner3.jpg" width="100%" height="60" />
     <div id="pre-order">
       <div id="order">
         <el-table
@@ -216,6 +216,7 @@ export default {
 <style scoped>
 .MyOrder {
   position: absolute;
+   min-width: 1190px;
   width: 100%;
   height: 100%;
   background: -webkit-repeating-linear-gradient(

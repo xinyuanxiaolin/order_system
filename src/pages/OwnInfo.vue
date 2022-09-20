@@ -1,6 +1,6 @@
 <template>
   <div id="OwnInfo">
-    <img src="@/assets/banner3.jpg" width="100%" height="80" />
+    <img src="@/assets/banner3.jpg" width="100%" height="60" />
 
     <div class="ownInfo">
       <div id="info">
@@ -184,6 +184,8 @@ export default {
 <style  scoped>
 #OwnInfo{
   position: absolute;
+   min-width: 1190px;
+
   width: 100%;
   height: 100%; 
  background: -webkit-repeating-linear-gradient(rgba(234,232,235,0.75),rgba(224,231,234,0.75));

@@ -1,5 +1,6 @@
 <template>
   <div class="denglu">
+    <div class="denglu-head"></div>
     <div class="container" ref="container">
       <link rel="stylesheet" href="" />
       <div class="form-container sign-up-container">
@@ -32,7 +33,7 @@
           />
           <!-- <button id="send_code">发送验证码</button>
         <input type="number" placeholder="验证码" /> -->
-          <button @click="register">注册</button>
+          <button @click.prevent="register">注册</button>
         </form>
       </div>
       <div class="form-container sing-in-container">
@@ -55,7 +56,7 @@
             v-model="sign_in.password"
           />
           <a href="#">忘记密码?</a>
-          <button @click="login">登陆</button>
+          <button @click.prevent="login">登陆</button>
         </form>
       </div>
       <!-- 侧边栏内容 -->
@@ -129,11 +130,11 @@ export default {
               this.$message("登陆成功");
               setTimeout(() => {
                 this.$router.push("/index");
-              }, 1500);
+              }, 1000);
             } else if (response.data.code === "600") {
-              alert(response.data.msg);
+              this.$message(response.data.msg);
             } else if (response.data.code === "400") {
-              alert("用户名或者密码不能为空!");
+              this.$message("用户名或者密码不能为空!");
             }
           },
           (error) => {
@@ -175,14 +176,16 @@ export default {
 </script>
 
 <style scoped>
-.denglu{
+.denglu {
   position: relative;
-  height: 720px;
-    background: -webkit-repeating-linear-gradient(
-    rgba(234, 232, 235, 0.75),
-    rgba(224, 231, 234, 0.75)
+
+  height: 100%;
+
+  background-image: linear-gradient(
+    to bottom left,
+    rgba(129, 129, 252, 0.75) 0%,
+    rgba(232, 232, 150, 0.75) 100%
   );
-  
 }
 h1 {
   margin: 0.2rem;
@@ -212,8 +215,7 @@ a {
 }
 
 .container {
-  /* 相对定位 */
-  position: relative;
+  position: absolute;
   background: #fff;
   border-radius: 10px;
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
@@ -222,8 +224,8 @@ a {
   height: 35rem;
   left: 0;
   right: 0;
-  top: 50px;
-
+  top: 0;
+  bottom: 0;
   margin: auto;
   /* 溢出隐藏 */
   overflow: hidden;
@@ -342,7 +344,7 @@ button.ghost:active {
 
 .overlay {
   background-image: linear-gradient(
-      rgba(0, 0, 255, 0.5),
+      rgba(163,163,251, 0.877),
       rgba(255, 255, 0, 0.5)
     ),
     url("./img/食界之大.png");
@@ -411,4 +413,5 @@ button.ghost:active {
   transform: translateX(20%);
   transition: all 0.6s ease-in-out;
 }
+
 </style>

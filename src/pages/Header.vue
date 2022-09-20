@@ -4,34 +4,43 @@
       <div id="logo" @click="goToHome">
         <span id="logo-t">食界之大</span>
       </div>
-      <el-menu
-        class="el-menu-demo"
-        mode="horizontal"
-        text-color="rgba(19, 18, 18 )"
-      >
-        <el-menu-item index="" @click="goToOwn">
-          <el-avatar
-            :size="50"
-            fit="cover"
-            :src="circleUrl"
-            style="border: 2px solid rgb(232, 232, 237)"
-          ></el-avatar>
-        </el-menu-item>
-        <el-menu-item index="1" @click="home"> 首页 </el-menu-item>
-        <el-menu-item index="2" @click="notice"> 公告 </el-menu-item>
+      <div class="menu-t" style="display: flex">
+        <el-menu
+          class="el-menu-demo"
+          mode="horizontal"
+          text-color="rgba(255,255,255,.7)"
+        >
+          <el-menu-item index="" @click="goToOwn">
+            <el-avatar
+              :size="50"
+              fit="cover"
+              :src="circleUrl"
+              style="border: 2px solid rgb(232, 232, 237)"
+            ></el-avatar>
+          </el-menu-item>
+          <el-menu-item index="1" @click="home"> 首页 </el-menu-item>
+          <el-menu-item index="2" @click="notice"> 公告 </el-menu-item>
 
-        <el-menu-item index="3" @click="cart"> 购物车 </el-menu-item>
-        <el-menu-item index="4" @click="order"> 我的订单 </el-menu-item>
-
-        <el-submenu index="2">
-          <template slot="title">{{ username }}</template>
-          <el-menu-item index="2-1" @click="enterBms" v-if="admin"
-            >进入后台管理系统</el-menu-item
-          >
-          <el-menu-item index="2-2" @click="ownInfo">个人信息</el-menu-item>
-          <el-menu-item index="2-3" @click="tuichu">退出</el-menu-item>
-        </el-submenu>
-      </el-menu>
+          <el-menu-item index="3" @click="cart"> 购物车 </el-menu-item>
+          <el-menu-item index="4" @click="order"> 我的订单 </el-menu-item>
+        </el-menu>
+        <el-menu
+          mode="horizontal"
+          text-color="rgba(255,255,255,.7)"
+          
+          background-color="rgba(20,20,20,0.25)"
+          class="el-menu-demo"
+        >
+          <el-submenu index="1">
+            <template slot="title">{{ username }}</template>
+            <el-menu-item index="1-1" @click="enterBms" v-if="admin"
+              >进入后台管理系统</el-menu-item
+            >
+            <el-menu-item index="1-2" @click="ownInfo">个人信息</el-menu-item>
+            <el-menu-item index="1-3" @click="tuichu">退出</el-menu-item>
+          </el-submenu>
+        </el-menu>
+      </div>
     </div>
 
     <router-view v-if="isRouterAlive"></router-view>
@@ -45,7 +54,10 @@ export default {
     return {
       username: localStorage.username,
       isRouterAlive: true,
-      circleUrl: localStorage.avatarUrl,
+      circleUrl:
+        localStorage.avatarUrl === null
+          ? "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
+          : localStorage.avatarUrl,
     };
   },
 
@@ -111,10 +123,13 @@ export default {
 
 #header {
   position: absolute;
-  height: 80px;
-  background-color: rgba(245, 245, 245, 0.22);
+  display: flex;
+  justify-content: space-between;
+  height: 60px;
+  background-color: rgba(245, 245, 245, 0.25);
   font-weight: 500;
   letter-spacing: 5px;
+  min-width: 1190px;
 
   top: 0;
   bottom: 0;
@@ -128,16 +143,17 @@ export default {
 }
 
 #logo-t {
-  color: rgba(245, 245, 245, 0.7);
+  color: rgba(245, 245, 245, 0.9);
   font-family: fa;
 
   font-weight: 500;
-  font-size: 50px;
+  font-size: 40px;
   margin-left: 20px;
-  line-height: 100px;
+  line-height: 70px;
 }
 .el-menu-demo {
   float: right;
+  font-weight: 600;
 }
 .el-menu-item:hover {
   background-color: rgba(255, 255, 255, 0.5) !important;
@@ -146,10 +162,10 @@ export default {
 .el-menu {
   background-color: transparent;
   border: none !important;
-  height: 80px;
+  height: 60px;
 }
 .el-menu-item {
-  height: 80px !important;
-  line-height: 80px !important;
+  height: 60px !important;
+  line-height: 60px !important;
 }
 </style>
